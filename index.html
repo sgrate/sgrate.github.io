@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang ="en">
+<head>
+	<meta charset="utf-8">
+	<title>SGI Sherwin Tracker</title>
+    	<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+    	<link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
+    	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
+
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-analytics.js"></script>
+
+  <!-- Add Firebase products that you want to use -->
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
+
+<script>
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  var firebaseConfig = {
+    apiKey: "AIzaSyDG9aherYNa5mIIBQp-PabOjbfGVhrRLzU",
+    authDomain: "sgi-ratetrack.firebaseapp.com",
+    databaseURL: "https://sgi-ratetrack.firebaseio.com",
+    projectId: "sgi-ratetrack",
+    storageBucket: "sgi-ratetrack.appspot.com",
+    messagingSenderId: "334069917870",
+    appId: "1:334069917870:web:f1ef44df3be98ebfa9e53f",
+    measurementId: "G-3S0J1PH6R6"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+  var db = firebase.firestore();
+  //let eventCollection = db.collection("events");
+  //var storageRef = firebase.storage().ref();
+  //var perf = firebase.performance();
+
+</script>
+	<script async src = "js/objects.js"></script>
+	<script async src = "js/db.js"></script>
+	<script async src = "js/buttons.js"></script>
+	
+	<script async src = "js/graph.js"></script>
+	<script async src = "js/pageworker.js"></script>
+	<!---
+	<div id = "chartContainer"><canvas id="canvas"></canvas></div>
+	-->
+	<div class ="row" style = "height: 100%;" id = "outputContainer"><span id = "queriedContent"></span></div>
+	
+</head>
+<body>
+	
+	<script src="node_modules/chart.js/dist/Chart.js"></script>
+
+<script>
+// [0,0,0,0,0]
+// var lineChartData = {
+// 			labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+// 			datasets: [{
+// 				label: 'V6',
+// 				borderColor: 'rgba(0,0,0, .2)',
+// 				backgroundColor: 'rgba(0,0,0, 1)',
+// 				fill: false,
+// 				data: [0,0,0,0,0],
+// 				yAxisID: 'y-axis-1',
+// 			}, {
+// 				label: 'V7',
+// 				borderColor: 'rgba(0,255,255, .2)',
+// 				backgroundColor: 'rgba(0,255,255, 1)',
+// 				fill: false,
+// 				data: [0,0,0,0,0],
+// 				yAxisID: 'y-axis-1'
+// 			},
+// 			{
+// 				label: 'V8',
+// 				borderColor: 'rgba(255,0,0, .2)',
+// 				backgroundColor: 'rgba(255,0,0, 1)',
+// 				fill: false,
+// 				data: [0,0,0,0,0],
+// 				yAxisID: 'y-axis-1'
+// 			},
+// 			{
+// 				label: 'DF',
+// 				borderColor: 'rgba(0,255,0, .2)',
+// 				backgroundColor: 'rgba(0,255,0, 1)',
+// 				fill: false,
+// 				data: [0,0,0,0,0],
+// 				yAxisID: 'y-axis-1'
+// 			},
+// 			{
+// 				label: 'BH',
+// 				borderColor: 'rgba(0,0,255, .2)',
+// 				backgroundColor: 'rgba(0,0,255, 1)',
+// 				fill: false,
+// 				data: [0,0,0,0,0],
+// 				yAxisID: 'y-axis-1'
+// 			}]
+// 		};
+// const data = [{x: 'Jan', net: 100, cogs: 50, gm: 50}, {x: 'Feb', net: 120, cogs: 55, gm: 75}];
+// const cfg = {
+//     type: 'bar',
+//     data: {
+//         labels: ['Jan', 'Feb'],
+//         datasets: [{
+//             label: 'Net sales',
+//             data: data,
+//             parsing: {
+//                 yAxisKey: 'net'
+//             }
+//         }, {
+//             label: 'Cost of goods sold',
+//             data: data,
+//             parsing: {
+//                 yAxisKey: 'cogs'
+//             }
+//         }, {
+//             label: 'Gross margin',
+//             data: data,
+//             parsing: {
+//                 yAxisKey: 'gm'
+//             }
+//         }]
+//     },
+// };
+
+// var ctx = document.getElementById('canvas').getContext('2d');
+// 			var chart = new Chart.Line(ctx, {
+// 				data: lineChartData,
+// 				options: {
+// 					responsive: true,
+// 					hoverMode: 'index',
+// 					stacked: false,
+// 					title: {
+// 						display: true,
+// 						text: 'Kits for Week of Oct. 05, 2020'
+// 					},
+// 					scales: {
+// 						yAxes: [{
+// 							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+// 							display: true,
+// 							ticks: {
+// 								beginAtZero: true	
+// 							},
+							
+// 							position: 'right',
+// 							id: 'y-axis-1',
+// 							 }
+// 						// , {
+// 						// 	type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+// 						// 	display: true,
+// 						// 	position: 'right',
+// 						// 	id: 'y-axis-2',
+
+// 						// 	// grid line settings
+// 						// 	gridLines: {
+// 						// 		drawOnChartArea: false, // only want the grid lines for one axis to show up
+// 						// 	},
+// 						// }
+// 						],
+// 					}
+// 				}
+// 			});
+// 			window.myLine = chart;
+
+
+// // var ctx = document.getElementById('myChart');
+// // var myChart = new Chart(ctx, {
+// //     type: 'line',
+// //     data: {
+// //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+// //         datasets: [{
+// //         	fill: false,
+// //             label: '# of Votes',
+// //             data: [12, 19, 3, 5, 2, 3],
+// //             backgroundColor: [
+// //                 'rgba(255, 99, 132, 0.2)',
+// //                 'rgba(54, 162, 235, 0.2)',
+// //                 'rgba(255, 206, 86, 0.2)',
+// //                 'rgba(75, 192, 192, 0.2)',
+// //                 'rgba(153, 102, 255, 0.2)',
+// //                 'rgba(255, 159, 64, 0.2)'
+// //             ],
+// //             borderColor: [
+// //                 'rgba(255, 99, 132, 1)',
+// //                 'rgba(54, 162, 235, 1)',
+// //                 'rgba(255, 206, 86, 1)',
+// //                 'rgba(75, 192, 192, 1)',
+// //                 'rgba(153, 102, 255, 1)',
+// //                 'rgba(255, 159, 64, 1)'
+// //             ],
+// //             borderWidth: 1
+// //         }]
+// //     },
+// //     options: {
+// //         scales: {
+// //             yAxes: [{
+// //                 ticks: {
+// //                     beginAtZero: true
+// //                 }
+// //             }]
+// //         }
+// //     }
+// // });
+</script>
+
+
+<button type="button" id = "openmodalbtn" class="btn btn-primary" data-toggle="modal" data-target="#newDataModal">
+  Add New Data
+</button>
+
+<!-- Add Data Modal -->
+<div class="modal fade" id="newDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addDataTitle">Add Production Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form id = "newDataForm">
+      		<div class = "form-group">
+			<input id="datepicker" type="text">
+			</div>
+      		<div class = "form-group">
+         <label for="tagSelect">Category</label>
+			<select name="tagSelect" id="tagSelect">
+			  <option value="V6">V6</option>
+			  <option value="V7">V7</option>
+			  <option value="V8">V8</option>
+			  <option value="DF">DF</option>
+			  <option value="BH">BH</option>
+			</select> 
+			</div>
+			<div class = "form-group">
+				<label for="amount">Amount Produced</label>
+				<input id="amount" type="number" placeholder = "Amount Produced">
+			</div>
+			<div class = "form-group">
+				<label for="hours">Hours Spent</label>
+				<input id="hours" type="number" placeholder = "Hours Spent">
+			</div>
+		</form>
+    <script>
+        var datepicker = new ej.calendars.DatePicker({ width: "255px" });
+        datepicker.appendTo('#datepicker');
+    </script>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id = "add-data-btn">Add Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Data Modal -->
+<div class="modal fade" id="categoryDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewDataTitle">Add Production Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div id = "viewDataDisplayBody"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id = "add-data-btn">Filter Data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="
+sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

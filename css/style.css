@@ -1,0 +1,20 @@
+#chartContainer {
+	height: 5vh;
+	width: 90vw;
+}
+#controlsContainer {
+	position: absolute;
+	bottom: 1vh;
+}
+#outputContainer {
+	margin: 2%;
+}
+#openmodalbtn {
+	position: absolute;
+	bottom: 1.5%;
+	right: 1.5%;
+}
+.modal-body {
+	max-height: 75vh;
+	overflow: scroll;
+}
