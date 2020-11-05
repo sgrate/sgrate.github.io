@@ -8,7 +8,10 @@
     	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script
+			  src="https://code.jquery.com/jquery-3.5.1.min.js"
+			  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+			  crossorigin="anonymous"></script>
     	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
 
   <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
@@ -50,10 +53,18 @@
 	<!---
 	<div id = "chartContainer"><canvas id="canvas"></canvas></div>
 	-->
-	<div class ="row" style = "height: 100%;" id = "outputContainer"><span id = "queriedContent"></span></div>
 	
 </head>
 <body>
+	<header><div id = "logoWrapper"><img id = "blueLogo" src= "img/bluelogo.svg"></div></header>
+	<div id = "curProjectHeader">
+	<span id = "curProjectTitle">Sherwin Williams</span>
+	<br><span id = "buttonSpan">
+		<button type="button" id = "chooseProjBtn" class="btn btn-primary" data-toggle="modal" data-target="#projectSelectModal">
+		  Switch Project
+		</button>
+	</span>
+</div>
 	
 	<script src="node_modules/chart.js/dist/Chart.js"></script>
 
@@ -208,13 +219,12 @@
 // // });
 </script>
 
+<div class ="row" style = "height: 100%;" id = "outputContainer"><span id = "queriedContent"></span></div>
 
-<button type="button" id = "openmodalbtn" class="btn btn-primary" data-toggle="modal" data-target="#newDataModal">
-  Add New Data
-</button>
+
 
 <!-- Add Data Modal -->
-<div class="modal fade" id="newDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newDataModal" tabindex="-1" aria-labelledby="newDataModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -228,16 +238,6 @@
       		<div class = "form-group">
 			<input id="datepicker" type="text">
 			</div>
-      		<div class = "form-group">
-         <label for="tagSelect">Category</label>
-			<select name="tagSelect" id="tagSelect">
-			  <option value="V6">V6</option>
-			  <option value="V7">V7</option>
-			  <option value="V8">V8</option>
-			  <option value="DF">DF</option>
-			  <option value="BH">BH</option>
-			</select> 
-			</div>
 			<div class = "form-group">
 				<label for="amount">Amount Produced</label>
 				<input id="amount" type="number" placeholder = "Amount Produced">
@@ -245,6 +245,12 @@
 			<div class = "form-group">
 				<label for="hours">Hours Spent</label>
 				<input id="hours" type="number" placeholder = "Hours Spent">
+			</div>
+			<div class = "form-group">
+				<label for="shift">Shift</label>
+				<input type="radio" name = "shift" value = "first" checked>First
+				<input  type="radio" name = "shift" value = "second" >Second
+
 			</div>
 		</form>
     <script>
@@ -260,8 +266,8 @@
   </div>
 </div>
 
-<!-- Add Data Modal -->
-<div class="modal fade" id="categoryDataModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- View Data Modal -->
+<div class="modal fade" id="categoryDataModal" tabindex="-1" aria-labelledby="categoryDataModal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -275,7 +281,65 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id = "add-data-btn">Filter Data</button>
+        <button type="button" class="btn btn-primary" id = "filterDataBtn">Filter Data</button>
+        <button type="button" id = "openmodalbtn" class="btn btn-primary" data-toggle="modal" data-target="#newDataModal">
+  		Add New Data
+</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Project List Modal -->
+<div class="modal fade" id="projectSelectModal" tabindex="-1" aria-labelledby="projectSelectModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewDataTitle">Select Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<div id = "selectProjectDisplayBody"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id = "createProjBtn" >Create New Project</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Project Modal -->
+<div class="modal fade" id="createProjectModal" tabindex="-1" aria-labelledby="createProjectModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewDataTitle">Create New Project</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+      		<div class = "form-group">
+				<label for="hours">Project Name</label>
+				<input id="newProjectName" type="text">
+			</div>
+
+			<div class = "form-group">
+				<label for="hours">Project Categories</label>
+				<div id = "newProjectCategoryList">No categories yet. Add one below.</div>
+				<label for="hours">New Category</label>
+				<input id="newProjectCategoryName" type="text">
+				<button id = "addProjectCategoryModalBtn" class = "xButton" type = "button"><span class = "xButtonText">+</span></button>
+			</div>
+
+      	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id = "submitProjBtn" type = "button">Create</button>
       </div>
     </div>
   </div>
@@ -292,12 +356,11 @@
 
 
 
-
-	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="
 sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
 
 </body>
+<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis -  2020</footer>
 </html>
