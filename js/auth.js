@@ -59,6 +59,7 @@ $("#forgotPassword").click(function() {
  * Attempts to sign the user in.
  */
  $("#signInBtn").click(async function() {
+  console.log("click");
     $("#signInSpinner").fadeIn();
     document.getElementById("signInBtn").disabled = true;
     var email = $("#loginEmail").val();
