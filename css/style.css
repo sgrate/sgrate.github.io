@@ -31,6 +31,7 @@ html {
 	border: solid white;
 	border-width: .2vh;
 	margin-bottom: .5em;
+	display: none;
 }
 
 #chartContainer {
