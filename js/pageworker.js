@@ -8,6 +8,7 @@ $(document).ready(function() {
 
 	//LOGIN HANDLING
 	firebase.auth().onAuthStateChanged(async function(user) {
+		console.log("go")
 	    if (user) {
 	    	console.log("logged in");
 	      	if (!user.emailVerified) {
