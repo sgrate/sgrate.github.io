@@ -6,6 +6,7 @@
     	<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
     	<link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
     	<link rel="stylesheet" href="css/style.css">
+    	<link rel="stylesheet" href="css/login.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
 <script
@@ -47,6 +48,7 @@
 	<script async src = "js/objects.js"></script>
 	<script async src = "js/db.js"></script>
 	<script async src = "js/buttons.js"></script>
+	<script async src = "js/auth.js"></script>
 	
 	<script async src = "js/graph.js"></script>
 	<script async src = "js/pageworker.js"></script>
@@ -57,170 +59,97 @@
 </head>
 <body>
 	<header><div id = "logoWrapper"><img id = "blueLogo" src= "img/bluelogo.svg"></div></header>
-	<div id = "curProjectHeader">
-	<span id = "curProjectTitle">Sherwin Williams</span>
-	<br><span id = "buttonSpan">
-		<button type="button" id = "chooseProjBtn" class="btn btn-primary" data-toggle="modal" data-target="#projectSelectModal">
-		  Switch Project
-		</button>
-	</span>
+	<div id = "trackerApplet">
+		<div id = "curProjectHeader">
+		<span id = "curProjectTitle">Sherwin Williams</span>
+		<br><span id = "buttonSpan">
+			<button type="button" id = "chooseProjBtn" class="btn btn-primary" data-toggle="modal" data-target="#projectSelectModal">
+			  Switch Project
+			</button>
+		</span>
+	</div>
+		
+		<script src="node_modules/chart.js/dist/Chart.js"></script>
+
+	<div class ="row" style = "height: 100%;" id = "outputContainer"><span id = "queriedContent"></span></div>
 </div>
-	
-	<script src="node_modules/chart.js/dist/Chart.js"></script>
-
-<script>
-// [0,0,0,0,0]
-// var lineChartData = {
-// 			labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-// 			datasets: [{
-// 				label: 'V6',
-// 				borderColor: 'rgba(0,0,0, .2)',
-// 				backgroundColor: 'rgba(0,0,0, 1)',
-// 				fill: false,
-// 				data: [0,0,0,0,0],
-// 				yAxisID: 'y-axis-1',
-// 			}, {
-// 				label: 'V7',
-// 				borderColor: 'rgba(0,255,255, .2)',
-// 				backgroundColor: 'rgba(0,255,255, 1)',
-// 				fill: false,
-// 				data: [0,0,0,0,0],
-// 				yAxisID: 'y-axis-1'
-// 			},
-// 			{
-// 				label: 'V8',
-// 				borderColor: 'rgba(255,0,0, .2)',
-// 				backgroundColor: 'rgba(255,0,0, 1)',
-// 				fill: false,
-// 				data: [0,0,0,0,0],
-// 				yAxisID: 'y-axis-1'
-// 			},
-// 			{
-// 				label: 'DF',
-// 				borderColor: 'rgba(0,255,0, .2)',
-// 				backgroundColor: 'rgba(0,255,0, 1)',
-// 				fill: false,
-// 				data: [0,0,0,0,0],
-// 				yAxisID: 'y-axis-1'
-// 			},
-// 			{
-// 				label: 'BH',
-// 				borderColor: 'rgba(0,0,255, .2)',
-// 				backgroundColor: 'rgba(0,0,255, 1)',
-// 				fill: false,
-// 				data: [0,0,0,0,0],
-// 				yAxisID: 'y-axis-1'
-// 			}]
-// 		};
-// const data = [{x: 'Jan', net: 100, cogs: 50, gm: 50}, {x: 'Feb', net: 120, cogs: 55, gm: 75}];
-// const cfg = {
-//     type: 'bar',
-//     data: {
-//         labels: ['Jan', 'Feb'],
-//         datasets: [{
-//             label: 'Net sales',
-//             data: data,
-//             parsing: {
-//                 yAxisKey: 'net'
-//             }
-//         }, {
-//             label: 'Cost of goods sold',
-//             data: data,
-//             parsing: {
-//                 yAxisKey: 'cogs'
-//             }
-//         }, {
-//             label: 'Gross margin',
-//             data: data,
-//             parsing: {
-//                 yAxisKey: 'gm'
-//             }
-//         }]
-//     },
-// };
-
-// var ctx = document.getElementById('canvas').getContext('2d');
-// 			var chart = new Chart.Line(ctx, {
-// 				data: lineChartData,
-// 				options: {
-// 					responsive: true,
-// 					hoverMode: 'index',
-// 					stacked: false,
-// 					title: {
-// 						display: true,
-// 						text: 'Kits for Week of Oct. 05, 2020'
-// 					},
-// 					scales: {
-// 						yAxes: [{
-// 							type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-// 							display: true,
-// 							ticks: {
-// 								beginAtZero: true	
-// 							},
-							
-// 							position: 'right',
-// 							id: 'y-axis-1',
-// 							 }
-// 						// , {
-// 						// 	type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
-// 						// 	display: true,
-// 						// 	position: 'right',
-// 						// 	id: 'y-axis-2',
-
-// 						// 	// grid line settings
-// 						// 	gridLines: {
-// 						// 		drawOnChartArea: false, // only want the grid lines for one axis to show up
-// 						// 	},
-// 						// }
-// 						],
-// 					}
-// 				}
-// 			});
-// 			window.myLine = chart;
 
 
-// // var ctx = document.getElementById('myChart');
-// // var myChart = new Chart(ctx, {
-// //     type: 'line',
-// //     data: {
-// //         labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-// //         datasets: [{
-// //         	fill: false,
-// //             label: '# of Votes',
-// //             data: [12, 19, 3, 5, 2, 3],
-// //             backgroundColor: [
-// //                 'rgba(255, 99, 132, 0.2)',
-// //                 'rgba(54, 162, 235, 0.2)',
-// //                 'rgba(255, 206, 86, 0.2)',
-// //                 'rgba(75, 192, 192, 0.2)',
-// //                 'rgba(153, 102, 255, 0.2)',
-// //                 'rgba(255, 159, 64, 0.2)'
-// //             ],
-// //             borderColor: [
-// //                 'rgba(255, 99, 132, 1)',
-// //                 'rgba(54, 162, 235, 1)',
-// //                 'rgba(255, 206, 86, 1)',
-// //                 'rgba(75, 192, 192, 1)',
-// //                 'rgba(153, 102, 255, 1)',
-// //                 'rgba(255, 159, 64, 1)'
-// //             ],
-// //             borderWidth: 1
-// //         }]
-// //     },
-// //     options: {
-// //         scales: {
-// //             yAxes: [{
-// //                 ticks: {
-// //                     beginAtZero: true
-// //                 }
-// //             }]
-// //         }
-// //     }
-// // });
-</script>
+<div id = "loginApplet" >
+        <div class = "container centered-container">
+            <p class = "sg-font-hdr">Stephen Gould Indianapolis Rate Tracking</p>
 
-<div class ="row" style = "height: 100%;" id = "outputContainer"><span id = "queriedContent"></span></div>
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Log In</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New Account</a>
+                    <a class="nav-item nav-link" id="nav-resend-tab" data-toggle="tab" href="#nav-resend" role="tab" aria-controls="nav-resend" aria-selected="false">Resend Verification</a>
+                </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <form>
+                        <h3 class = "landing-hdr">Login</h3>
 
+                        <div class="form-group">
+                            <label for ="email">Email Address</label>
+                            <input id = "loginEmail" type="email" class="form-control" placeholder="name@stephengould.com" autocomplete="email" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for = "password">Password</label>
+                            <input id = "loginPass" type="password" class="form-control" placeholder = "Password" autocomplete="password" />
+                        </div>
+                        <button type="button" class="btn btn-primary login-btn" id = "signInBtn">Sign In
+                            <span id = "signInSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" 
+                                  style = "display: none;"></span></button>
+                        <p class="forgot-password text-center">
+                         <a href="#" id = "forgotPassword">Forgot Password?</a>
+                     </p>
+
+                     <p class = "text-center"><a href = "changelog.txt" id = "changelog">Changelog</a></p>
+                 </form>
+             </div>
+             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                <form>
+                    <h3 class = "landing-hdr">New User</h3>
+
+                    <div class="form-group">
+                        <label for ="newUserEmail">Email Address</label>
+                        <input id = "newUserEmail" type="email" class="form-control" placeholder="example@stephengould.com" />
+                    </div>
+                    <div class="form-group">
+                        <label for ="newUserName">Name</label>
+                        <input id = "newUserName" type="text" class="form-control" placeholder="First and Last Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for = "newUserPass">Password</label>
+                        <input id = "newUserPass" type="password" class="form-control" placeholder="Must be at least 6 characters" />
+                    </div>
+                    <button type="button" class="btn btn-primary login-btn" id = "createAccountBtn">Create Account</button>
+
+                </form>
+            </div>
+            <div class="tab-pane fade" id="nav-resend" role="tabpanel" aria-labelledby="nav-resend-tab">
+                <form>
+                    <h3 class = "landing-hdr">Resend Confirmation Email</h3>
+
+                    <div class="form-group">
+                        <label for ="resendEmailBox">Email Address</label>
+                        <input id = "resendEmailBox" type="email" class="form-control" placeholder="example@stephengould.com" autocomplete="username" />
+                    </div>
+                    <div class="form-group">
+                        <label for = "resendEmailPass">Password</label>
+                        <input id = "resendEmailPass" type="password" class="form-control" placeholder="Password" autocomplete="password" />
+                    </div>
+                    <button type="button" class="btn btn-primary login-btn" id = "resendEmailBtn">Resend Email</button>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
 
 
 <!-- Add Data Modal -->
@@ -362,5 +291,7 @@ sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossor
 
 
 </body>
-<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis -  2020</footer>
+<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis -  2020
+	<br><button class = "btn btn-danger tiny-btn" id = "signOutBtn">Sign Out</button>
+</footer>
 </html>

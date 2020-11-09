@@ -5,6 +5,40 @@
 
 
 $(document).ready(function() {
+
+	//LOGIN HANDLING
+	firebase.auth().onAuthStateChanged(async function(user) {
+	    if (user) {
+	    	console.log("logged in");
+	      	if (!user.emailVerified) {
+	        	//TODO: If user logs in without emailVerification, get a log
+	        	await firebase.auth().signOut().then(function() {
+	           		console.log("logged out");
+		      	}).catch(function(error) {
+		        	// An error happened.
+		      	});
+		      	return;
+	   		}
+	   		//USER VALID & LOGGED IN
+	   		curUserId = user.uid;
+	   		console.log(curUserId)
+    		$("#loginApplet").fadeOut();
+			$("#trackerApplet").fadeIn();
+		    $("#signOutBtn").hide();
+		    $("#loadingSpinner").hide();
+		    $("#signOutBtn").show();
+		} else {
+			$("#trackerApplet").fadeOut();
+			$("#loginApplet").fadeIn();
+		    $("#signOutBtn").hide();
+		    $("#loginApplet").fadeIn();
+		    $("#signInSpinner").hide();
+		}	
+		document.getElementById("signInBtn").disabled = false;
+	}
+	);
+
+
 	let today = new Date();
 	let result = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`;
 	$("#datepicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
@@ -60,6 +94,7 @@ function appendTagSpan(tagName) {
 	//Add data summary Section
 	var summarySection = document.createElement("div");
 	$(summarySection).attr("id", `${$(outputContainer).children(".data-wrapper").length}-summary`);
+	$(summarySection).css("text-align", "center");
 	displayWrapper.appendChild(summarySection);
 	
 
@@ -210,7 +245,7 @@ function initDataModal(tag) {
  */
 function initProjectsModal() {
 	$("#selectProjectDisplayBody").html("");
-	db.collection("projects").get().then(function(querySnapshot) {
+	db.collection("projects").where("creator", "==", curUserId).get().then(function(querySnapshot) {
 		querySnapshot.forEach(function(doc) {
 			if (doc.id == curProject)
 				return;

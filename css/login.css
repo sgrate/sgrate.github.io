@@ -1,0 +1,503 @@
+body {
+	font-family: Post Grotesk,Helvetica,Arial,sans-serif;
+	word-break: break-word !important;
+	word-wrap: break-word !important;
+}
+
+#loadingSpinner {
+	margin-top: 50vh;
+	margin-left: 50vw;
+
+}
+
+.formlabel {
+	color: white;
+    font-weight: bold;
+    font-size: 2.5vh;
+}
+
+#dateAlert {
+	font-weight: 400;
+	font-size: 2.5vh;
+	text-align: center;
+	border-radius: 30px;
+	line-height: 1em;
+	width: 75%;
+	margin: auto;
+	margin-bottom: .75rem;
+	margin-top: .75rem;
+	background-color: #F24E1B !important;
+	color: white;
+	border-color: white;
+	border-width: 2px;
+}
+
+#inout-btngroup {
+	width: 100%;
+}
+#buttonformgroup {
+	background-color: white;
+	border: solid #F24E1B;
+    padding: .5em;
+    margin: auto;
+    border-radius: 10px;
+    width: 50%;
+}
+
+#outgoingbtn {
+	width: 50%;
+}
+#incomingbtn {
+	width: 50%;
+}
+
+
+.container {
+	word-wrap: break-word !important;
+	word-break: break-word !important;
+  	padding-top: 20px;
+  	padding-right: 30px;
+    padding-bottom: 20px;
+ 	padding-left: 20px;
+ 	overflow: auto;
+}	
+#modalComments {
+	word-break: break-word;
+	word-wrap: break-word;
+}
+#hamburger {
+	padding: 3px;
+	padding-left: 5px;
+	height: 100%;
+	display: none;
+}
+#hamburger:hover {
+	filter: brightness(150%) !important;
+}
+button:hover {
+	filter: brightness(90%);
+}
+.tiny-btn {
+	line-height: 1em;
+	border-radius: 30px;
+}
+
+#loginApplet {
+	display: none;
+	height: 90%;
+}
+
+
+.modalContainer {
+	border-top: 1px solid rgba(0,0,0,.25);
+	border-bottom: 1px solid rgba(0,0,0,.25);
+	padding-top: 5px !important;
+	padding-bottom: 5px !important; 
+}
+#infoModalContainer {
+	max-height: 50vh;
+}
+.fc-event-container:hover {
+	cursor: pointer;
+}
+
+
+.popover-body {
+	overflow: scroll;
+	max-height: 50vh;
+}
+
+#modal-body {
+}
+
+#formcontainer {
+	display: none;
+	padding: 20px;
+	background-color: #082a40;
+	border-width: 20px;
+	border-bottom-left-radius: 25px;
+	border-bottom-right-radius: 25px;
+	border-radius: 25px;
+	margin-bottom: 15px;
+	max-width: 100%;
+	margin-top: .25em;
+	margin-bottom: .25em;
+
+}
+
+.modal-content {
+	width: 800px;
+	max-height: 100%;
+	margin-left: auto;
+	margin-right: auto;
+}
+.modal-backdrop
+{
+    opacity:0.5 !important;
+
+}
+#closeModal {
+	font-size: 40px;
+	outline: none;
+}
+.modal-header {
+	height: 60px;
+}
+#shipTicketPdfContainer {
+	height: 300px;
+	margin: 0 auto;
+}
+#ladingPdfContainer {
+	height: 300px;
+	margin: 0 auto;
+}
+#pdfCarousel {
+	width: 80%;
+	height: 300px;
+}
+.carousel-inner {
+
+	height: 300px;
+	margin: 0 auto;
+}
+.carousel-item {
+	height: 300px;
+	
+} 
+.pdfobject-container { 
+	height: 300px; 
+}
+form {
+	border-color: black;
+	background: white;
+}
+small {
+	color: rgba(0,0,0,.4);
+}
+
+.btn {
+	z-index: 0 !important;
+}
+
+.btn:focus,.btn:active:focus,.btn.active:focus,
+.btn.focus,.btn:active.focus,.btn.active.focus {
+    outline: none;
+}
+
+.btn:disabled {
+	cursor: not-allowed !important;
+}
+
+.btn:focus, .btn:active {
+  box-shadow: none !important;
+  
+}
+.btn-outline-primary:active, .btn-outline-primary:hover {
+	color: black !important;
+}
+.btn-outline-warning:active, .btn-outline-warning:hover, .btn-primary:active {
+	color: lightgrey !important;
+	outline: #082a40 !important;
+}
+.btn-primary, .btn-primary:focus, .btn-primary:hover,
+.btn-outline-warning:focus, .btn-outline-warning:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
+	color: white;
+	background-color: #082a40 !important;
+    border-color: #082a40;
+}
+
+
+.btn-outline-primary:hover, .btn-warning, .btn-warning:focus, .btn-warning:hover, .btn-warning:active {
+    color: white; 
+    border-color: #F24E1B !important;
+    background-color: #F24E1B !important;
+}
+
+.btn-outline-warning {
+    color: #F24E1B; 
+    border-color: #F24E1B;
+}
+ .btn-outline-primary {
+    color: #082a40; 
+    border-color: #082a40;
+}
+#modalTitle, #managePaperworkTitle, #editInfoTitle {
+	
+}
+
+#eventHistoryBtn {
+	line-height: 0px;
+	border-radius: 30px;
+	padding: .65em;
+	padding-top: .75em;
+	padding-bottom: .75em;
+	font-size: 12px;
+	background-color: grey;
+	border-color: grey;
+}
+
+.centered-container {
+	height: 87%;
+	margin: 0;
+  	position: absolute;
+  	top: 50%;
+  	left: 50%;
+  	transform: translate(-50%, -50%);
+  	width: 450px;
+	border-radius: 25px;
+	border: solid #F24E1B;
+  	background-color: white;
+  	margin-bottom: 0px !important;
+  	padding-bottom: 0px !important;
+}
+
+.form-group {
+	bottom: 10px;
+}
+.login-btn {
+	margin-top: 0px;
+	width: 200px;
+	transform: translate(50%, 0%);
+}
+.forgot-password {
+	margin-top: 30px;
+}
+#forgotPassword {
+	color: #F24E1B;
+}
+
+.tab-pane {
+	height: 340px;
+}
+.landing-hdr {
+	text-align: center;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	color: #082a40;
+	font-weight: lighter;
+}
+#logo {
+	width: 80%;
+	display: block;
+  	margin-left: auto;
+  	margin-right: auto;
+
+}
+.sg-font-hdr {
+	font-family: Post Grotesk,Helvetica,Arial,sans-serif;
+    color: #082a40;
+    font-size: 30px;
+    font-weight: 12;
+    text-align: center;
+	word-break: break-word;
+	font-weight: lighter;
+}
+.sg-font-hdr::before {
+	content: "";
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 60px;
+	height: 60px;
+	background-image: url('../img/logo.svg');
+	background-position: center;
+	background-size: contain;
+}
+
+header {
+	z-index: 1;
+	position: fixed;
+	height: 5.5vh;
+	padding-bottom: 0px;
+	left: 0;
+	top: 0;
+	width: 100%;
+	background-color: #F24E1B;
+	color: white;
+	border-bottom: solid white;
+}
+
+footer {
+	height: 5.5%;
+	z-index: 1;
+	position: fixed;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #F24E1B;
+	color: white;
+	text-align: center;
+	display: none;
+	border-top: solid white;
+}
+footer > * {
+	color: #082a40;
+	font-size: 12px;
+}
+#version {
+	font-size: 9px;
+}
+
+#signInBtn, #createAccountBtn {
+	background-color: #082a40;
+	border-color: #082a40;
+
+}
+.nav-item {
+	color: #082a40;
+	border-top-color: lightgrey !important;
+	border-left-color: lightgrey !important;
+	border-right-color: lightgrey !important;
+}
+.nav-item:hover {
+	color: #F24E1B !important;
+	border-top-color: #F24E1B !important;
+	border-left-color: #F24E1B !important;
+	border-right-color: #F24E1B !important;
+}
+
+#shipTicketFileArea, #newPaperworkFileArea {
+	outline: dashed #F24E1B;
+	margin-left: 20px;
+	background-color: lightgrey;
+}
+
+.xButtonText {
+	line-height: 0px;
+	height: 1.7px;
+}
+.xButton {
+	padding: 0 auto;
+	color: white;
+	background-color: #F24E1B;
+	border-radius: 30px;
+	border: solid #082a40;
+	outline: none;
+	vertical-align: middle;
+	height: 30px;
+	width: 30px;
+	text-align: center;
+	display: inline-flex;
+  	flex-direction: column;
+ 	justify-content: center;
+  	align-items: center;
+  	font-weight: bold;
+  	text-decoration: none;
+}
+	
+#clearFilesBtn:active, #clearTimeBtn:active {
+	color: black;
+}
+
+body {
+	height: 100%;
+	background-color: #082a40;
+	overflow: scroll;
+}
+
+.tab-pane {
+	background: white;
+}
+.nav-link.active {
+	color: #F24E1B !important;
+	border-top-color: #F24E1B !important;
+	border-left-color: #F24E1B !important;
+	border-right-color: #F24E1B !important;
+}
+
+
+#spinning{
+  animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; 
+
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+
+    }
+    to {
+        transform:rotate(360deg);
+
+    }
+
+}
+
+
+
+
+
+
+/* Dropdown Button */
+#dropdownbtn {
+  	background-color: transparent;
+  	border: none;
+  	cursor: pointer;
+  	outline: none;
+}
+
+/* Dropdown button on hover & focus */
+#dropdownbtn:hover, #dropdownbtn:focus {
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+
+
+}
+#myDropdown {
+	width: 20vh;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  transition: visibility 0s, opacity .25s;
+  margin-top: 2.5px;
+  opacity: 0.0;
+  visibility: hidden;
+  position: absolute;
+  min-width: 30vh;
+  z-index: 1;
+  border-bottom: solid #082a40;
+  border-right: solid #082a40;
+  border-bottom: solid white;
+  border-right: solid white;
+  padding: 3px;
+  border-radius: 20px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+  border-bottom-left-radius: 0px;
+  background-color: #F24E1B;
+}
+
+/* Links inside the dropdown */
+.dropdown-content > * {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  width: 90%;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #ddd}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+
+
+
+
+
+
+
+
+

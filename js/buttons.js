@@ -118,7 +118,8 @@ $("#submitProjBtn").on("click", async function() {
 	// addFirestoreProjectEntry({name, tags}).then((ret) => {
 	// 	console.log(ret);
 	// })
-	(addFirestoreProjectEntry({name, tags}).then((ref) => {
+	let creator = curUserId;
+	(addFirestoreProjectEntry({name, tags, creator}).then((ref) => {
 		db.collection("projects").doc(ref.id).get().then((doc) => {
 			console.log(doc)
 			let data = doc.data();

@@ -2,12 +2,13 @@
  * Written by Spencer Douglas dougla55@purdue.edu on behalf of Stephen Gould Indianapolis.
  */
 var curProject = "8Feju4gTuQXX57M5tbs0";
+var curUserId;
 var curProjectName = "Sherwin-Williams";
 var curProjectTags = ["V6", "V7", "V8", "DF", "BH"]; //holds the current subcategory tags of the currently selected project. 
 var newDataWritten = false;
 var lastCollection;
 
-/* accepts a rateData entry and writes it to the rates collection */
+/* accepts a Project entry and writes it to the rates collection */
 async function addFirestoreProjectEntry(newProject) {
 	//TODO: CHECK FOR PROPER MEMBERS
 	let writePromise =  new Promise((resolve, reject) => {
@@ -100,9 +101,10 @@ async function getAllRateData(projectId) {
 				let firstShiftAmount = firstShiftTotals[index].totalProduced;
 				let secondShiftAmount = secondShiftTotals[index].totalProduced;
 
-				var firstShiftRate = (firstShiftCost / firstShiftAmount).toFixed(2);
-				var secondShiftRate = (secondShiftCost / secondShiftAmount).toFixed(2);
-				var avgRate = (totalCost / (firstShiftAmount + secondShiftAmount)).toFixed(2);
+				var firstShiftRate = (firstShiftCost / firstShiftAmount).toFixed(3);
+				var secondShiftRate = (secondShiftCost / secondShiftAmount).toFixed(3);
+				var avgRate = (totalCost / (firstShiftAmount + secondShiftAmount)).toFixed(3);
+				console.log(firstShiftAmount, firstShiftCost, secondShiftAmount, secondShiftCost)
 				if (isNaN(firstShiftRate)) {
 					firstShiftRate = 0.0;
 				} 
