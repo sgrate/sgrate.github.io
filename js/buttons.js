@@ -1,9 +1,6 @@
 
 $("#add-data-btn").on("click", async function() {
-
 	let tag = $("#viewDataTitle").html().split(" Data")[0]; //extract tag from modal header
-
-
 	let now = new Date();
 	let date = $('#datepicker').val()
 	var amountProduced = $("#amount").val();
@@ -48,6 +45,7 @@ $("#add-data-btn").on("click", async function() {
 		
 	
 });
+//OPEN ADD DATA MODAL
 $("#openmodalbtn").on("click", function() {
 	$("#categoryDataModal").modal("hide");
 	let today = new Date();
@@ -58,30 +56,125 @@ $("#openmodalbtn").on("click", function() {
 
 
 $("#chooseProjBtn").on("click", function() {
-
 	initProjectsModal();
-	
 });
 
 
 $("#createProjBtn").on("click", function() {
 	$("#projectSelectModal").modal("hide");
+	$("#newProjectCategoryList").empty();
+	$("#newProjectName").val("");
+	$("#newProjectCategoryName").val("");
+	$("#newProjectCategoryList").html("No projects yet. Add one below.");
+
 	setTimeout(() => {$("#createProjectModal").modal("show");}, 100);
+	//clear the project list
 		
 });
 
+var removedClients = []; // array to hold functions 
+//OPEN CLIENT MANAGER
+$("#manageClientBtn").on("click", function() {
+	$("#manageClientName").val(curProjectName);
+	$("#manageClientNewProjectName").val("");
+	$("#manageClientProjectList").empty();
+
+		curProjectTags.forEach((tag) => {
+			addCategoryListEntry(tag, true);
+	})
+	removedClients = []; // reset list of removed clients
+});
+
+//UPDATE CLIENT WITH CHANGES
+
+$("#updateClientBtn").on("click", function() {
+	var updatedName = false;
+	var projRef = db.collection("projects").doc(curProject);
+
+
+	//ADD PROJECT HANDLING
+
+	let projectNames = $("#manageClientProjectList").children(".data-entry").children(".category-name");
+	projectNames.each(function() {
+		let name = $(this).html();
+		console.log(name);
+		if (!curProjectTags.includes(name)) {
+			//tag is new; add it to the current project's entry
+			projRef.update({
+			    tags: firebase.firestore.FieldValue.arrayUnion(name)
+			});
+			curProjectTags.push(name);
+			appendTagSpan(name);
+		}
+	});
+
+	//DELETE PROJECTS HANDLING
+	//clean up projects which have been removed
+	removedClients.forEach(function(removedProject) {
+		removeFirestoreProjectData(removedProject, curProject);
+		const index = curProjectTags.indexOf(removedProject);
+		if (index > -1) {
+		  curProjectTags.splice(index, 1);
+		}
+	});
+
+	$("#manageClientModal").modal("hide");
+	loadProject(curProject, curProjectName, curProjectTags);
+});
+
+//add new project to existing client
+$("#manageClientNewProjectBtn").on("click", () => {
+	var isValid = true;
+	if ($("#manageClientNewProjectName").val().length > 0) {
+			let currentVal = $("#manageClientProjectList").html();
+			if (currentVal == "No projects yet. Add one below.") {
+				$("#manageClientProjectList").html("");
+			}
+			//check each data entry, get its category name, and ensure the new one is unique
+			$("#manageClientProjectList").children(".data-entry").each(function() {
+				console.log($("#manageClientProjectList").children(".data-entry"));
+				let child = $(this);
+				if (child.children(".category-name").html() == $("#manageClientNewProjectName").val()) {
+					alert("Project already exists.");
+					isValid = false;
+				}
+				else {
+					console.log(child.children(".category-name").html(), $("#manageClientNewProjectName").val())
+				}
+			});
+			if (isValid) {
+				addCategoryListEntry($("#manageClientNewProjectName").val(), true);
+				$("#manageClientNewProjectName").val("");
+			}
+			
+	}
+});
+
+
+/*
+ * Handles "Delete Customer" button in the manage customer modal
+ */
+$("#deleteCustomerBtn").on("click", () => {
+	if (confirm("WARNING: This will delete the customer and ALL its projects under this name. Are you sure you wish to delete?")){
+		
+	}
+});
+
+
+
+//ADD NEW PROJECT IN CLIENT CREATION MODAL 
 $("#addProjectCategoryModalBtn").on("click", function() {
 	var isValid = true;
 	if ($("#newProjectCategoryName").val().length > 0) {
 			let currentVal = $("#newProjectCategoryList").html();
-			if (currentVal == "No categories yet. Add one below.") {
+			if (currentVal == "No projects yet. Add one below.") {
 				$("#newProjectCategoryList").html("");
 			}
 			$("#newProjectCategoryList").children(".data-entry").each(function() {
 				console.log($("#newProjectCategoryList").children(".data-entry"));
 				let child = $(this);
 				if (child.children(".category-name").html() == $("#newProjectCategoryName").val()) {
-					alert("Category already exists.");
+					alert("Project already exists.");
 					isValid = false;
 				}
 				else {
@@ -112,7 +205,7 @@ $("#submitProjBtn").on("click", async function() {
 				tags.push(child.children(".category-name").html())
 	});
 	if (tags.length <= 0) {
-		alert("No categories.")
+		alert("No projects. You must have a least one to create a client.")
 		return;
 	}
 	// addFirestoreProjectEntry({name, tags}).then((ret) => {

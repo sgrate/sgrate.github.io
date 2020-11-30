@@ -78,8 +78,8 @@ button:hover {
 	filter: brightness(90%);
 }
 .tiny-btn {
-	line-height: 1em;
-	border-radius: 30px;
+	line-height: 1em !important;
+	border-radius: 30px !important;	
 }
 
 #loginApplet {

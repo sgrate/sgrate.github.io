@@ -8,9 +8,8 @@ $(document).ready(function() {
 
 	//LOGIN HANDLING
 	firebase.auth().onAuthStateChanged(async function(user) {
-		console.log("go")
 	    if (user) {
-	    	console.log("logged in");
+	    	console.log("user logged in");
 	      	if (!user.emailVerified) {
 	        	//TODO: If user logs in without emailVerification, get a log
 	        	await firebase.auth().signOut().then(function() {
@@ -21,19 +20,65 @@ $(document).ready(function() {
 		      	return;
 	   		}
 	   		//USER VALID & LOGGED IN
+
 	   		curUserId = user.uid;
-	   		console.log(curUserId)
-    		$("#loginApplet").fadeOut();
-			$("#trackerApplet").fadeIn();
-		    $("#signOutBtn").hide();
-		    $("#loadingSpinner").hide();
-		    $("#signOutBtn").show();
+	   		//automatically load the current project
+	   		db.collection("userdata").doc(curUserId).get().then((doc) => {
+	   			let data = doc.data();
+	   			curProject = data.lastCustomerId;
+	   			curProjectName = data.lastCustomerName;
+	   			curProjectTags = data.lastCustomerTags;
+	   			//USER'S MOST RECENT CUSTOMER EXISTED PREVIOUSLY, BUT MAY HAVE BEEN DELETED:
+				db.collection("projects").doc(curProject).get().then((doc) => {
+					console.log(doc.data())
+					if (doc.data() != undefined) {
+						loadProject(curProject, curProjectName, curProjectTags);
+			    		$("#loginApplet").fadeOut();
+						$("#trackerApplet").fadeIn();
+						$("#blueLogo").fadeIn();
+					    $("#signOutBtn").hide();
+					    $("#loadingSpinner").hide();
+					    $("#signOutBtn").show();
+					}
+				    else {
+				    	$("#curProjectTitle").html("No customer selected!");
+				    	$("#manageClientBtn").hide();
+				    	initProjectsModal();
+						$("#loginApplet").fadeOut();
+						$("#trackerApplet").fadeIn();
+						$("#blueLogo").fadeIn();
+					    $("#signOutBtn").hide();
+					    $("#loadingSpinner").hide();
+					    $("#signOutBtn").show();
+				    }
+				}).catch(() => {
+					//PROMPT USER TO SELECT NEW
+				});
+
+	   			
+	   		}).catch(() => {
+	   			console.log("idk man", curUserId)
+	   			loadProject(undefined);
+	   			$("#loginApplet").fadeOut();
+				$("#trackerApplet").fadeIn();
+				$("#blueLogo").fadeIn();
+			    $("#signOutBtn").hide();
+			    $("#loadingSpinner").hide();
+			    $("#signOutBtn").show();
+			   
+	   		});
+	   		
+	   		
+
 		} else {
+			console.log("logged out");	
 			$("#trackerApplet").fadeOut();
 			$("#loginApplet").fadeIn();
+			$("#blueLogo").fadeOut();
 		    $("#signOutBtn").hide();
 		    $("#loginApplet").fadeIn();
 		    $("#signInSpinner").hide();
+
 		}	
 		document.getElementById("signInBtn").disabled = false;
 	}
@@ -43,7 +88,6 @@ $(document).ready(function() {
 	let today = new Date();
 	let result = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`;
 	$("#datepicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
-	loadProject(curProject, curProjectName, curProjectTags);
 });
 
 //Add a function for
@@ -74,6 +118,7 @@ function appendTagSpan(tagName) {
 	//Add View Data btn
 	var viewDataBtn = document.createElement("button");
 	var viewDataBtnWrap = document.createElement("div");
+	$(viewDataBtn).attr("type", "button");
 	$(viewDataBtnWrap).css("text-align", "center");
 
 	$(viewDataBtn).html(`View/Manage ${tagName} Data`);
@@ -121,7 +166,7 @@ function initTagDisplay() {
 function initDataModal(tag) {
 	$("#viewDataDisplayBody").html("");
 	if (!curProjectTags.includes(tag)) {
-		alert("An error occurred finding the data for this category.");
+		alert("An error occurred finding the data for this project.");
 		return;
 	}
 
@@ -141,7 +186,7 @@ function initDataModal(tag) {
 	    	addModalDataEntry(newEntry, doc.id);
         });
         if (queryResult === "") 
-			$("#viewDataDisplayBody").html("No data found for this category.");
+			$("#viewDataDisplayBody").html("No data found for this project.");
 
 
 		$("#viewDataTitle").html(`${tag} Data`);
@@ -183,6 +228,7 @@ function initDataModal(tag) {
  	//$(manageBtn).attr("src", ELLIPSIS_SRC);
  	$(manageBtn).addClass("manage-entry-btn btn");
  	$(manageBtn).attr("id", `manage-${documentId}`);
+ 	$(manageBtn).attr("type", "button");
  	manageBtn.addEventListener("click", function() {
 		//attempt to delete the entry
 		deleteEntry(documentId, newDataEntry);
@@ -201,8 +247,14 @@ function initDataModal(tag) {
 
 
 
- function addCategoryListEntry(category) {
- 	let displayArea = document.getElementById("newProjectCategoryList");
+ function addCategoryListEntry(category, manageClient) {
+ 	let displayArea;
+ 	if (manageClient == true) {
+		displayArea = document.getElementById("manageClientProjectList");
+ 	}
+ 	else {
+ 		displayArea = document.getElementById("newProjectCategoryList");
+ 	}
  	//create data line item
  	var entry = document.createElement("div");
  	$(entry).addClass("data-entry");
@@ -222,13 +274,32 @@ function initDataModal(tag) {
  	var manageBtn = document.createElement("button");
  	//$(manageBtn).attr("src", ELLIPSIS_SRC);
  	$(manageBtn).addClass("manage-entry-btn btn");
- 	manageBtn.addEventListener("click", function() {
- 		displayArea.removeChild(entry);
- 		if (!displayArea.firstChild) {
- 			displayArea.innerHTML = "No categories yet. Add one below."
- 		}
-	});
+ 	$(manageBtn).attr("type", "button");
+ 	if (manageClient == true) {
+	 	manageBtn.addEventListener("click", function(event) {
+			if (confirm("Are you sure you would like to remove this project? All its rate data will be removed.")) {
+		 		displayArea.removeChild(entry);
+		 		if (!displayArea.firstChild) {
+		 			displayArea.innerHTML = "No projects yet. Add one below."
+		 		}
+		 		event.preventDefault();
+		 		removedClients.push(category);
+		 		return true;
+	 		}
+	 		else {
+	 			return false;
+	 		}
 
+		});
+	} else {
+	 	manageBtn.addEventListener("click", function() {
+
+	 		displayArea.removeChild(entry);
+	 		if (!displayArea.firstChild) {
+	 			displayArea.innerHTML = "No projects yet. Add one below."
+	 		}
+		});
+	}
  	btnSpan.appendChild(manageBtn);
  	entry.appendChild(btnSpan);
 
@@ -246,7 +317,9 @@ function initDataModal(tag) {
  */
 function initProjectsModal() {
 	$("#selectProjectDisplayBody").html("");
-	db.collection("projects").where("creator", "==", curUserId).get().then(function(querySnapshot) {
+	db.collection("projects")
+	.where("creator", "==", curUserId)
+	.get().then(function(querySnapshot) {
 		querySnapshot.forEach(function(doc) {
 			if (doc.id == curProject)
 				return;
@@ -258,17 +331,16 @@ function initProjectsModal() {
     		projectEntry.innerHTML = name;
     		projectEntry.classList.add("project-entry");
     		projectEntry.addEventListener("click", function() {
-    			if (confirm(`Would you like to load project ${data.name}?`)) 
+    			if (confirm(`Would you like to load projects for client ${data.name}?`)) 
     				loadProject(doc.id, data.name, data.tags);
     		});
 
     		let projectsContainer = document.getElementById("selectProjectDisplayBody");
     		projectsContainer.appendChild(projectEntry);
 	    	console.log(data);
-	    	console.log("not sure")
         });
         if ($("#selectProjectDisplayBody").html() == "") {
-        	$("#selectProjectDisplayBody").html("No other projects found. You may start a new project using the 'New Project' button.")
+        	$("#selectProjectDisplayBody").html("No other clients found. You may create a new client using the 'New Client' button.")
         }
 	}).catch(function(error) {
 		console.log("Error getting documents: ", error);
@@ -276,17 +348,27 @@ function initProjectsModal() {
 
 
 	$("#projectSelectModal").modal("show");
-	console.log("ye")
-	
 }
 /*
  * loadProject(project) - loads the specifed project with its categories/tags and datapoints
  */
 function loadProject(projectId, projectName, categories) {
 	
+
 	//Clean up current project DOM.
 	$("#outputContainer").html("");
 	//Init all categories.
+	if (projectId == undefined) {
+		//user has no projects; load the generic container
+		$("#curProjectTitle").html("Welcome to SGI RateTrack!");
+		$("#manageClientBtn").hide();
+		$("#chooseProjBtn").html("Create Client");
+		$("#outputContainer").html("Rate Data is collected under Clients, which can have any number of projects associated with them. " + 
+								   "To create your first client project, click the create button above.");
+		return;
+	}
+	$("#manageClientBtn").show();
+	$("#chooseProjBtn").html("Create/Switch Customer");
 	categories.forEach(function(cat) {
 		if (cat == undefined) 
 			return;
@@ -299,6 +381,13 @@ function loadProject(projectId, projectName, categories) {
 	curProjectTags = categories;
 	$("#curProjectTitle").html(curProjectName);
 	$("#projectSelectModal").modal("hide");
+	db.collection("userdata").doc(curUserId).set({
+		"lastCustomerId": projectId,
+		"lastCustomerName": projectName,
+		"lastCustomerTags": categories
+	}, {merge: true}).then(() => {
+		console.log("successfully did it");
+	});
 }
 
 

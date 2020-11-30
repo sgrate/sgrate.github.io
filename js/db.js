@@ -1,10 +1,10 @@
 /* db.js - functions concerned with interfacing with firestore. 
  * Written by Spencer Douglas dougla55@purdue.edu on behalf of Stephen Gould Indianapolis.
  */
-var curProject = "8Feju4gTuQXX57M5tbs0";
+var curProject;
 var curUserId;
-var curProjectName = "Sherwin-Williams";
-var curProjectTags = ["V6", "V7", "V8", "DF", "BH"]; //holds the current subcategory tags of the currently selected project. 
+var curProjectName;
+var curProjectTags; //holds the current subcategory tags of the currently selected project. 
 var newDataWritten = false;
 var lastCollection;
 
@@ -17,9 +17,8 @@ async function addFirestoreProjectEntry(newProject) {
 			resolve(docRef);
 		    return docRef;
 		}).catch(function(error) {
-			reject("fasfasdf");
+			reject("nope");
 			console.log("Error writing document: ", error);
-			return "what";
 		    
 		});
 	});
@@ -70,7 +69,7 @@ async function getAllRateData(projectId) {
 	    	var entryIndex = curProjectTags.indexOf(data.tag);
 	    	if (entryIndex == -1) {
 	    		console.log(data.tag)
-	    		alert("Malformed data, please contact dougla55@purdue.edu.");
+	    		//alert("Malformed data, please contact dougla55@purdue.edu.");
 	    		return;
 	    	}
 	        result += newEntry;
@@ -155,7 +154,7 @@ function deleteEntry(docId, DOMEntry) {
 	   setTimeout(function() {  
 	   displayArea.removeChild(DOMEntry);
 		    if (displayArea.innerHTML == "") {
-				displayArea.innerHTML = "No data found for this category.";
+				displayArea.innerHTML = "No data found for this project.";
 			}
 	   }, 300);
 
@@ -163,6 +162,43 @@ function deleteEntry(docId, DOMEntry) {
 	    console.error("Error removing document: ", error);
 	    return false;
 	});
+}
+
+
+
+/*
+ *	removeAllFirestoreProjects: removes all of the data associated with a customer 
+ */
+function removeAllFirestoreProjectsForCustomer(customerId, projectsArr) {
+	projectsArr.forEach((project) => {
+		removeFirestoreProjectData(project, customerId);
+	});
+}
+
+
+/*
+ * removeFirestoreProjectData: removes all of the associated rate data for the specified projectName under the customer customerId.
+ */
+function removeFirestoreProjectData(projectName, customerId) {
+	//get all the rate data for the project under the customerId
+	var tagRatesQuery = db.collection('rates').where('projectId','==', customerId).where('tag', '==', projectName);
+	//delete all the documents found
+	tagRatesQuery.get().then(function(querySnapshot) {
+		querySnapshot.forEach(function(doc) {
+    		doc.ref.delete();
+    	});
+		//remove the tag from the customer's entry
+		let customerRef = db.collection("projects").doc(customerId);
+		customerRef.update({
+		    tags: firebase.firestore.FieldValue.arrayRemove(projectName)
+		});
+	});
+
+	//delete all of the rate data for the project
+
+	//then
+
+	//delete the project from the customer entry
 }
 
 

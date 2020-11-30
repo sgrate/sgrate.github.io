@@ -65,7 +65,12 @@
 		<span id = "curProjectTitle">Sherwin Williams</span>
 		<br><span id = "buttonSpan">
 			<button type="button" id = "chooseProjBtn" class="btn btn-primary" data-toggle="modal" data-target="#projectSelectModal">
-			  Switch Project
+			  Create/Switch Client
+			</button>
+		</span>
+		<span id = "buttonSpan">
+			<button type="button" id = "manageClientBtn" class="btn btn-primary" data-toggle="modal" data-target="#manageClientModal">
+			  Manage Client
 			</button>
 		</span>
 	</div>
@@ -223,7 +228,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="viewDataTitle">Select Project</h5>
+        <h5 class="modal-title" id="viewDataTitle">Select Client</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -233,7 +238,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id = "createProjBtn" >Create New Project</button>
+        <button type="button" class="btn btn-primary" id = "createProjBtn" >Create New Client</button>
       </div>
     </div>
   </div>
@@ -244,7 +249,7 @@
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="viewDataTitle">Create New Project</h5>
+        <h5 class="modal-title" id="viewDataTitle">Create New Client</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -252,15 +257,15 @@
       <div class="modal-body">
       	<form>
       		<div class = "form-group">
-				<label for="hours">Project Name</label>
-				<input id="newProjectName" type="text">
+				<label for="hours">Client Name</label>
+				<input id="newProjectName" type="text" placeholder= "Client Name">
 			</div>
 
 			<div class = "form-group">
-				<label for="hours">Project Categories</label>
-				<div id = "newProjectCategoryList">No categories yet. Add one below.</div>
-				<label for="hours">New Category</label>
-				<input id="newProjectCategoryName" type="text">
+				<label for="hours">Client Projects</label>
+				<div id = "newProjectCategoryList">No projects yet. Add one below.</div>
+				<label for="hours">New Project</label>
+				<input id="newProjectCategoryName" type="text" placeholder="Project Name">
 				<button id = "addProjectCategoryModalBtn" class = "xButton" type = "button"><span class = "xButtonText">+</span></button>
 			</div>
 
@@ -269,6 +274,43 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id = "submitProjBtn" type = "button">Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Client Modal -->
+<div class="modal fade" id="manageClientModal" tabindex="-1" aria-labelledby="manageClientModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="manageClientTitle">Manage Client</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      	<form>
+      		<div class = "form-group">
+				<label for="manageClientName">Client Name (Cannot Currently Be Changed)</label>
+				<input id="manageClientName" type="text" disabled="disabled">
+			</div>
+
+			<div class = "form-group">
+				<label for="manageClientProjectList">Client Projects</label>
+				<div id = "manageClientProjectList">No projects yet. Add one below.</div>
+				<label for="manageClientNewProjectName">Add New Project</label>
+				<input id="manageClientNewProjectName" type="text" placeholder="Project Name">
+				<button id = "manageClientNewProjectBtn" class = "xButton" type = "button"><span class = "xButtonText">+</span></button>
+			</div>
+			<div class = "form-group">
+				<button class = "btn btn-danger tiny-btn" id = "deleteCustomerBtn" type = "button">DELETE CUSTOMER</button>
+			</div>
+      	</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary" id = "updateClientBtn" type = "button">Confirm Changes</button>
       </div>
     </div>
   </div>
@@ -291,7 +333,7 @@ sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossor
 
 
 </body>
-<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis -  2020 - v.1
+<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.2
 	<br><button class = "btn btn-danger tiny-btn" id = "signOutBtn">Sign Out</button>
 </footer>
 </html>
