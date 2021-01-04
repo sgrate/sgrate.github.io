@@ -382,6 +382,7 @@ function initProjectsModal() {
 	    	console.log(data);
         });
         if ($("#selectProjectDisplayBody").html() == "") {
+
         	$("#selectProjectDisplayBody").html("No other customers found. You may create a new customer using the 'New Customer' button.")
         }
 	}).catch(function(error) {

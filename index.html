@@ -25,7 +25,6 @@
 
 <script>
   // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   var testConfig = {
     apiKey: "AIzaSyAQbpyy6atOm9Nw6wRokl6dhedyqPFSDg0",
     authDomain: "sgi-testbranch.firebaseapp.com",
@@ -47,7 +46,10 @@
     measurementId: "G-3S0J1PH6R6"
   };
   // Initialize Firebase
-  firebase.initializeApp(testConfig);
+
+  //firebase.initializeApp(testConfig);
+  firebase.initializeApp(firebaseConfig);
+
   firebase.analytics();
 
   var db = firebase.firestore();
@@ -95,7 +97,6 @@
 <div id = "loginApplet" >
         <div class = "container centered-container">
             <p class = "sg-font-hdr">Stephen Gould Indianapolis RateTrack</p>
-
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Log In</a>
@@ -227,7 +228,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        
         <button type="button" id = "openmodalbtn" class="btn btn-primary" data-toggle="modal" data-target="#newDataModal">
   		Add New Data
 </button>

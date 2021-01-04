@@ -18,6 +18,7 @@ $("#add-data-btn").on("click", async function() {
 		errs += "The quantity input for Hours Spent is invalid.\n"
 	}
 	if (errs != "") {
+
 		//invalid input
 		alert("Your input has one or more issues:\n" + errs);
 		return;
@@ -62,7 +63,6 @@ $("#chooseProjBtn").on("click", function() {
 
 
 $("#createProjBtn").on("click", function() {
-	console.log("aaaa")
 	$("#projectSelectModal").modal("hide");
 	$("#newProjectCategoryList").empty();
 	$("#newProjectName").val("");
@@ -161,6 +161,7 @@ $("#deleteCustomerBtn").on("click", () => {
 		if(confirm("WARNING: Are you ABSOLUTELY SURE? This will DELETE ALL DATA LOGGED UNDER THIS CUSTOMER'S PROJECTS.")) {
 			removeAllFirestoreProjectsForCustomer(curProject, curProjectTags);	
 		}
+
 		
 	}
 });

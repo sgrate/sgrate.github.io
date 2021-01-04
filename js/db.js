@@ -135,7 +135,6 @@ async function getAllRateData(projectId) {
 				var firstShiftRate = (firstShiftCost / firstShiftAmount).toFixed(3);
 				var secondShiftRate = (secondShiftCost / secondShiftAmount).toFixed(3);
 				var avgRate = (totalCost / (firstShiftAmount + secondShiftAmount)).toFixed(3);
-
 				if (isNaN(firstShiftRate)) {
 					firstShiftRate = 0.0;
 				} 
@@ -171,7 +170,6 @@ async function getAllRateData(projectId) {
 		})
 		newDataWritten = false;
 	});
-
 	
 }
 
