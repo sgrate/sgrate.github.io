@@ -1,0 +1,15 @@
+//Developed by Spencer Douglas
+
+CHANGELOG: Here I will record changes made in each release so that you may understand progress, 
+as well as note new features/changes which may be important to you.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Beta v0.4:
+	- Rate data is now intelligently sorted by date
+	- Added ability to delete an entire customer and all its projects at once
+	- Verbiage corrections
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Beta v0.3:
+	- Added customer manager, where one can add/remove entire projects under a customer
+	- Last opened client is now preserved and will be automatically opened upon login
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -1,0 +1,223 @@
+body {
+	background: #082a40 !important;
+  	overflow: hidden; /* Hide scrollbars */
+}
+
+
+
+
+ /* Hide scrollbar for Chrome, Safari and Opera */
+html::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+html {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+} 
+
+
+#outputContainer {
+	text-align: center;
+	padding: 1vh;
+}
+.centered-container {
+	width: 30vw !important;
+}
+
+
+#signOutBtn {
+	font-size: 1em;
+	border-radius: 30px;
+	line-height: 1em;
+	border: solid white;
+	border-width: .2vh;
+	margin-bottom: .5em;
+	display: none;
+}
+
+#chartContainer {
+	height: 5vh;
+	width: 90vw;
+}
+#controlsContainer {
+	position: absolute;
+	bottom: 1vh;
+}
+#trackerApplet {
+	display: none;
+	margin: 2%;
+	background: white;
+	padding: 20px;
+	border: solid #F24E1B;
+	border-radius: 30px;
+}
+
+
+.dataWrapper {
+	border: solid black;
+	border-radius: 20px;
+	height: 80%;
+	margin: .5vw;
+}
+
+header {
+	position: fixed;
+	background-color: #F24E1B;
+	height: 5.5vh;
+	width: 100%;
+	top: 0px;
+	margin-bottom: 3vh;
+	
+}
+header, header > * {
+	z-index: 100;
+}
+footer {
+	position: fixed;
+	bottom: 0px;
+	left: 40%;
+	font-size: 1vh;
+	width: 20%;
+	text-align: center;
+	margin: auto;
+
+}
+#blueLogo {
+	height: 5.5vh;
+	padding: .75vh;
+	display: none;
+}
+#logoWrapper {
+	text-align: center;
+}
+body {
+	padding-top: 5.5vh;
+}
+label {
+	font-weight: bold;
+}
+#curProjectHeader {
+	margin: .5vh;
+	text-align: center;
+	padding: 1vh;
+
+}
+#curProjectTitle {
+	float: center;
+	font-weight: bold;
+	font-size: 125%;
+}
+
+#nnewProjectCategoryList {
+	border: 1px;
+	border-color: lightgrey;
+}
+
+
+
+#chooseProjBtn, #manageClientBtn {
+	line-height: 1;
+	border-radius: 30px;
+	/*
+	position: absolute;
+	top: 5.5%;
+	left: 1.5%;
+	*/
+}
+.modal-body {
+	max-height: 75vh;
+	overflow: scroll;
+}
+.manage-entry-btn {
+	background: url("../img/x.svg") no-repeat;
+	background-size: 100% 100%;
+	display: inline-block;
+	border-radius: 30px;
+	cursor: default;
+}
+.manage-entry-btn:hover {
+	filter: brightness(50%);
+	cursor: pointer;
+}
+
+.project-entry:hover, .data-entry:hover {
+	background-color: lightgrey;
+}
+.project-entry:active, .data-entry {
+		filter: brightness(50%);
+}
+
+
+
+
+.xButtonText {
+	line-height: 0px;
+	height: 1.7px;
+}
+body {
+	/*background: #082a40 !important;*/
+
+}
+
+.xButton {
+	padding: 0 auto;
+	color: white;
+	background-color: #F24E1B;
+	border-radius: 30px;
+	border: solid #082a40;
+	outline: none;
+	vertical-align: middle;
+	height: 30px;
+	width: 30px;
+	text-align: center;
+	display: inline-flex;
+  	flex-direction: column;
+ 	justify-content: center;
+  	align-items: center;
+  	font-weight: bold;
+  	text-decoration: none;
+}
+
+.pretty-btn {
+	line-height: 1 !important; 
+	border-radius: 30px !important;
+}
+
+.data-wrapper {
+	min-height: 60vh;
+	border: solid black;
+	border-radius: 20px;
+	height: 80%;
+	margin: .5vw;
+}
+.data-wrapper > h3, h5 {
+	text-align: center;
+}
+
+ /* Style the button that is used to open and close the collapsible content */
+.collapsible {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .collapsible:hover {
+  background-color: #ccc;
+}
+
+/* Style the collapsible content. Note: hidden by default */
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+} 
