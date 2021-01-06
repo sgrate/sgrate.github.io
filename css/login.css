@@ -203,7 +203,7 @@ small {
 .btn-outline-warning:focus, .btn-outline-warning:hover, .btn-outline-primary:active, .btn-outline-primary:focus {
 	color: white;
 	background-color: #082a40 !important;
-    border-color: #082a40;
+    border-color: #082a40 !important;
 }
 
 
@@ -218,8 +218,8 @@ small {
     border-color: #F24E1B;
 }
  .btn-outline-primary {
-    color: #082a40; 
-    border-color: #082a40;
+    color: #082a40 !important; 
+    border-color: #082a40 !important;
 }
 #modalTitle, #managePaperworkTitle, #editInfoTitle {
 	

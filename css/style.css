@@ -3,8 +3,13 @@ body {
   	overflow: hidden; /* Hide scrollbars */
 }
 
+.button-span {
+	line-height: 2.5em;
+}
 
-
+.filter-area {
+	border: solid lightgrey;
+}
 
  /* Hide scrollbar for Chrome, Safari and Opera */
 html::-webkit-scrollbar {
