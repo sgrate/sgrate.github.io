@@ -254,7 +254,7 @@ $("#filterDataBtn").on("click", function() {
 			$("#afterFilterCheckbox").prop("checked", false);
 			$("#afterFilterLabel").css("filter", "brightness(3)");
 			$("#afterPicker").prop("disabled", true);
-			$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
+			$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
 		}
 
 		if (endDate != "") {
@@ -266,7 +266,7 @@ $("#filterDataBtn").on("click", function() {
 			$("#beforeFilterCheckbox").prop("checked", false);
 			$("#beforePicker").prop("disabled", true);
 			$("#beforeFilterLabel").css("filter", "brightness(3)");
-			$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+			$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
 		}
 		
 		
