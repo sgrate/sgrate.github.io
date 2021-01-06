@@ -411,7 +411,7 @@ function loadProject(projectId, projectName, categories) {
 		return;
 	}
 	$("#manageClientBtn").show();
-	$("#chooseProjBtn").html("Create/Switch Customer");
+	$("#chooseProjBtn").html("Choose Customer");
 	categories.forEach(function(cat) {
 		if (cat == undefined) 
 			return;

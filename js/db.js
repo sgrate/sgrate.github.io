@@ -60,7 +60,7 @@ async function getAllRateData(projectId) {
 		//CASE 1: START AND END FILTER
 		if (startDate != "" && endDate != "") {
 			console.log("case 1");
-			query = db.collection("rates").where("date", ">=", startDate).where("date", "<", endDate).where("projectId", "==", projectId);
+			query = db.collection("rates").where("date", ">=", startDate).where("date", "<=", endDate).where("projectId", "==", projectId);
 		}
 		//CASE 2: START ONLY FILTER
 		else if (startDate != "" && endDate == "") {
@@ -165,7 +165,11 @@ async function getAllRateData(projectId) {
 				$(`#${index}-summary`).html(totalsStr + firstStr + secondStr);
 			}
 			else {
-				$(`#${index}-summary`).html("<h5>Production Summary</h5><b>No data matching the criteria.</b>");
+				if (isFiltered) {
+					$(`#${index}-summary`).html("<h5>Production Summary</h5><b>No data matching the criteria.</b>");
+				} else {
+					$(`#${index}-summary`).html("<h5>Production Summary</h5><b>No data yet.</b>");
+				}
 			}
 		})
 		newDataWritten = false;

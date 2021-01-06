@@ -68,7 +68,7 @@ $("#createProjBtn").on("click", function() {
 	$("#newProjectName").val("");
 	$("#newProjectCategoryName").val("");
 	$("#newProjectCategoryList").html("No projects yet. Add one below.");
-
+	$(this).prop("disabled", false);
 	setTimeout(() => {$("#createProjectModal").modal("show");}, 100);
 	//clear the project list
 		
@@ -211,33 +211,137 @@ $("#submitProjBtn").on("click", async function() {
 				tags.push(child.children(".category-name").html())
 	});
 	if (tags.length <= 0) {
-		alert("No projects. You must have a least one to create a client.")
+		alert("No projects. You must have a least one to add a customer.")
 		return;
 	}
 	// addFirestoreProjectEntry({name, tags}).then((ret) => {
 	// 	console.log(ret);
 	// })
 	let creator = curUserId;
+	$(this).prop("disabled", true);
 	(addFirestoreProjectEntry({name, tags, creator}).then((ref) => {
 		db.collection("projects").doc(ref.id).get().then((doc) => {
 			console.log(doc)
 			let data = doc.data();
 			loadProject(doc.id, data.name, data.tags);
+			$(this).prop("disabled", false);
 			$("#createProjectModal").modal("hide");
+		}).catch(() => {
+			$(this).prop("disabled", false);
 		})
 		// loadProject(ref.id, data.name, data.tags);
+	}).catch(()=> {
+		$(this).prop("disabled", false);
 	}))
 
 
 
 });
 
-
+/*
+ * FILTERING MANAGEMENT
+ */
 
 $("#filterDataBtn").on("click", function() {
-	alert("I can't do that yet.");
+	let today = new Date();
+	if(isFiltered) {
+		if (startDate != "") {
+			$("#afterPicker").val(firestoreDateToUSDate(startDate));
+			$("#afterFilterCheckbox").prop("checked", true);
+			$("#afterFilterLabel").css("filter", "");
+			$("#afterPicker").prop("disabled", false);
+		} else {
+			$("#afterFilterCheckbox").prop("checked", false);
+			$("#afterFilterLabel").css("filter", "brightness(3)");
+			$("#afterPicker").prop("disabled", true);
+			$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
+		}
+
+		if (endDate != "") {
+			$("#beforePicker").val(firestoreDateToUSDate(endDate));
+			$("#beforeFilterCheckbox").prop("checked", true);
+			$("#beforePicker").prop("disabled", false);
+			$("#beforeFilterLabel").css("filter", "");
+		} else {
+			$("#beforeFilterCheckbox").prop("checked", false);
+			$("#beforePicker").prop("disabled", true);
+			$("#beforeFilterLabel").css("filter", "brightness(3)");
+			$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+		}
+		
+		
+	} else {
+		$("#beforePicker").prop("disabled", true);
+		$("#beforeFilterLabel").css("filter", "brightness(3)");
+		$("#afterPicker").prop("disabled", true);
+		$("#afterFilterLabel").css("filter", "brightness(3)");
+		$("#afterFilterCheckbox").prop("checked", false);
+		$("#beforeFilterCheckbox").prop("checked", false);
+		$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
+		$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+	}
+	$("#filterDataModal").modal("show");
 });
 
+
+
+
+$('#afterFilterCheckbox').change(function() {
+	if(!this.checked) {
+		$("#afterFilterLabel").css("filter", "brightness(3)");
+		$("#afterPicker").prop("disabled", true);
+	}   else {
+		$("#afterFilterLabel").css("filter", "");
+		$("#afterPicker").prop("disabled", false);
+	} 
+});
+
+$('#beforeFilterCheckbox').change(function() {
+	if(!this.checked) {
+		$("#beforeFilterLabel").css("filter", "brightness(3)");
+		$("#beforePicker").prop("disabled", true);
+	}   else {
+		$("#beforeFilterLabel").css("filter", "");
+		$("#beforePicker").prop("disabled", false);
+	} 
+});
+
+
+$("#clearFilterBtn").on("click", () => {
+	isFiltered = false;
+	startDate = "";
+	endDate = "";
+	getAllRateData(curProject);
+});
+
+$("#applyFilterBtn").on("click", () => {
+	isFiltered = false;
+	startDate = "";
+	endDate = "";
+	if ($('#beforeFilterCheckbox').prop("checked")) {
+		//before filter has been requested
+		console.log("before on")
+		//TODO: VALIDATE THE DATE
+		endDate = convertToFirestoreDate($("#beforePicker").val());
+		isFiltered = true;
+	}
+	if ($('#afterFilterCheckbox').prop("checked")) {
+		//after filter has been requested
+		//TODO: VALIDATE THE DATE
+		console.log("after on")
+		startDate = convertToFirestoreDate($("#afterPicker").val());
+		isFiltered = true;
+	}
+	getAllRateData(curProject);
+	$("#filterDataModal").modal("hide");
+
+});
+
+
+
+/*
+ * END FILTERING MANAGEMENT
+ */
 
 
 
