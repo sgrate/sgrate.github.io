@@ -16,9 +16,9 @@
 			  crossorigin="anonymous"></script>
     	<script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-app.js"></script>
 
-  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+  <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics 
   <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-analytics.js"></script>
-
+-->
   <!-- Add Firebase products that you want to use -->
   <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/7.24.0/firebase-firestore.js"></script>
@@ -50,7 +50,7 @@
   //firebase.initializeApp(testConfig);
   firebase.initializeApp(firebaseConfig);
 
-  firebase.analytics();
+  //firebase.analytics();
 
   var db = firebase.firestore();
   //let eventCollection = db.collection("events");
@@ -62,7 +62,6 @@
 	<script  src = "js/db.js" defer></script>
 	<script  src = "js/buttons.js" defer></script>
 	<script  src = "js/auth.js" defer></script>
-	
 	<script  src = "js/graph.js" defer></script>
 	<script  src = "js/pageworker.js" defer></script>
 	<!---
@@ -75,21 +74,25 @@
 	<div id = "trackerApplet">
 		<div id = "curProjectHeader">
 		<span id = "curProjectTitle">Sherwin Williams</span>
-		<br><span id = "buttonSpan">
+		<br><span class = "button-span">
 			<button type="button" id = "chooseProjBtn" class="btn btn-primary" data-toggle="modal" data-target="#projectSelectModal">
-			  Create/Switch Customer
+			  Choose Customer
 			</button>
 		</span>
-		<span id = "buttonSpan">
+		<span class = "button-span">
 			<button type="button" id = "manageClientBtn" class="btn btn-primary tiny-btn" data-toggle="modal" data-target="#manageClientModal">
 			  Manage Customer
 			</button>
 		</span>
+    <br>
+    <span class = "button-span">
+    <button type="button" class="btn btn-primary tiny-btn" id = "filterDataBtn">Filter Data</button>
+  </span>
 	</div>
 		
 
 	<div class ="row" style = "height: 100%;" id = "outputContainer">
-    <button type="button" class="btn btn-primary tiny-btn" id = "filterDataBtn">Filter Data</button>
+    
     <span id = "queriedContent"></span></div>
 </div>
 
@@ -326,10 +329,57 @@
       </div>
     </div>
   </div>
+</div>d
+
+
+
+<!-- Filter Data Modal -->
+<div class="modal fade" id="filterDataModal" tabindex="-1" aria-labelledby="filterDataModal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filterDataTitle">Filter Data</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class = "form-group">
+            
+              <input type ="checkbox" id ="afterFilterCheckbox">
+              <div id = "afterFilterArea" class = "filter-area">
+                <label id = "afterFilterLabel">From:</label>
+                <input type = "text" id = "afterPicker">
+            
+                <script>
+                  var afterPicker = new ej.calendars.DatePicker({ width: "255px" });
+                  afterPicker.appendTo('#afterPicker');
+                </script>  
+              </div>
+          </div>        
+        </form>
+          <div class = "form-group">
+            <input type ="checkbox" id = "beforeFilterCheckbox">
+            <div id = "beforeFilterArea" class = "filter-area">
+                <label id = "beforeFilterLabel">Until:</label>
+              <input type = "text" id = "beforePicker">
+            
+              <script>
+                  var beforePicker = new ej.calendars.DatePicker({ width: "255px" });
+                  beforePicker.appendTo('#beforePicker');
+              </script>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "clearFilterBtn">Clear Filter
+        </button>
+        <button type="button" class="btn btn-primary" id = "applyFilterBtn" type = "button">Filter</button>
+      </div>
+    </div>
+  </div>
 </div>
-
-
-
 
 
 
@@ -346,7 +396,7 @@ sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossor
 
 
 </body>
-<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.4
+<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.5
 	<br><button class = "btn btn-danger tiny-btn" id = "signOutBtn">Sign Out</button>
 </footer>
 </html>
