@@ -48,38 +48,41 @@ async function addFirestoreRateEntry(newRateData) {
  * If startDate and EndDate are present, will also apply a filter to the data
  */
 async function getAllRateData(projectId) {
+	if (projectId == undefined) {
+		alert("bad req");
+	}
 	var result = "";
 
 	let query;
 	//CASE 0: NO FILTER
 	if (!isFiltered) {
-		console.log("case 0");
-		query = db.collection("rates").where("projectId", "==", projectId);
+		console.log("get case 0");
+		query = db.collection("rates");
 	}
 	else {
 		//CASE 1: START AND END FILTER
 		if (startDate != "" && endDate != "") {
-			console.log("case 1");
-			query = db.collection("rates").where("date", ">=", startDate).where("date", "<=", endDate).where("projectId", "==", projectId);
+			console.log("get case 1", startDate, endDate)
+			query = db.collection("rates").where("date", ">=", startDate).where("date", "<=", endDate);
 		}
 		//CASE 2: START ONLY FILTER
 		else if (startDate != "" && endDate == "") {
-			console.log("case 2");
-			query = db.collection("rates").where("date", ">=", startDate).where("projectId", "==", projectId);
+			console.log("get case 2", startDate)
+			query = db.collection("rates").where("date", ">=", startDate);
 		}
 		//CASE 3: END ONLY FILTER
 		else if (startDate == "" && endDate != "") {
-			console.log("case 3");
-			query = db.collection("rates").where("date", "<=", endDate).where("projectId", "==", projectId);
+			console.log("get case 3", endDate)
+			query = db.collection("rates").where("date", "<=", endDate);
 		}
 		else {
-			console.log("case def");
-			query = db.collection("rates").where("projectId", "==", projectId);
+			console.log("get case def");
+			query = db.collection("rates");
 		}
 	}
 	//get proper documents in rates collection
-	console.log(query)
-	query.get()
+
+	query.where("projectId", "==", projectId).get()
 	.then(function(querySnapshot) {
 		var newDataArr = Array(curProjectTags.length).fill("");
 		var firstShiftTotals = [];

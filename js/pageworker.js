@@ -180,17 +180,17 @@ function initDataModal(tag) {
 	else {
 		//CASE 1: START AND END FILTER
 		if (startDate != "" && endDate != "") {
-			console.log("case 1")
+			console.log("case 1", startDate, endDate)
 			query = db.collection("rates").where("date", ">=", startDate).where("date", "<=", endDate);
 		}
 		//CASE 2: START ONLY FILTER
 		else if (startDate != "" && endDate == "") {
-			console.log("case 2")
+			console.log("case 2", startDate)
 			query = db.collection("rates").where("date", ">=", startDate);
 		}
 		//CASE 3: END ONLY FILTER
 		else if (startDate == "" && endDate != "") {
-			console.log("case 3")
+			console.log("case 3", endDate)
 			query = db.collection("rates").where("date", "<=", endDate);
 		}
 		else {
