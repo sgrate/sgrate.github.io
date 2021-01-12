@@ -11,10 +11,13 @@ $("#add-data-btn").on("click", async function() {
 
 	let numRegex = new RegExp('^([0-9]+(\.[0-9]+)?)$'); 
 	var errs = "";
-	if (!numRegex.test(amountProduced)) {
+	if (!moment($("#datepicker").val(), 'MM/DD/YYYY',true).isValid()) {
+		errs += "The selected date is invalid. Use the calendar icon to select a date.\n"
+	}
+	if (!numRegex.test(amountProduced) || amountProduced <= 0) {
 		errs += "The quantity input for Amount Produced is invalid.\n"
 	}
-	if (!numRegex.test(hoursSpent)) {
+	if (!numRegex.test(hoursSpent) || hoursSpent <= 0) {
 		errs += "The quantity input for Hours Spent is invalid.\n"
 	}
 	if (errs != "") {
@@ -51,9 +54,16 @@ $("#add-data-btn").on("click", async function() {
 $("#openmodalbtn").on("click", function() {
 	$("#categoryDataModal").modal("hide");
 	let today = new Date();
-	let result = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`;
-	console.log(result);
-	$("#datepicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+
+	var month = today.getUTCMonth() + 1;
+		if (month < 10) 
+			month = `0${month}`;
+		
+		var date = today.getUTCDate();
+		if (date < 10) 
+			date = `0${date}`;
+		
+	$("#datepicker").val(`${month}/${date}/${today.getFullYear()}`);
 });
 
 
@@ -244,6 +254,17 @@ $("#submitProjBtn").on("click", async function() {
 
 $("#filterDataBtn").on("click", function() {
 	let today = new Date();
+	var month = today.getUTCMonth() + 1;
+	if (month < 10) 
+		month = `0${month}`;
+	
+	var date = today.getUTCDate();
+	if (date < 10) 
+		date = `0${date}`;
+	
+	var tmorDate = today.getUTCDate() + 1;
+	if (tmorDate < 10)
+		tmorDate = `0${tmorDate}`;
 	if(isFiltered) {
 		if (startDate != "") {
 			$("#afterPicker").val(firestoreDateToUSDate(startDate));
@@ -254,7 +275,7 @@ $("#filterDataBtn").on("click", function() {
 			$("#afterFilterCheckbox").prop("checked", false);
 			$("#afterFilterLabel").css("filter", "brightness(3)");
 			$("#afterPicker").prop("disabled", true);
-			$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+			$("#afterPicker").val(`${month}/${date}/${today.getFullYear()}`);
 		}
 
 		if (endDate != "") {
@@ -266,7 +287,7 @@ $("#filterDataBtn").on("click", function() {
 			$("#beforeFilterCheckbox").prop("checked", false);
 			$("#beforePicker").prop("disabled", true);
 			$("#beforeFilterLabel").css("filter", "brightness(3)");
-			$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
+			$("#beforePicker").val(`${month}/${tmorDate}/${today.getFullYear()}`);
 		}
 		
 		
@@ -277,8 +298,10 @@ $("#filterDataBtn").on("click", function() {
 		$("#afterFilterLabel").css("filter", "brightness(3)");
 		$("#afterFilterCheckbox").prop("checked", false);
 		$("#beforeFilterCheckbox").prop("checked", false);
-		$("#beforePicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate() + 1}/${today.getFullYear()}`);
-		$("#afterPicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+
+
+		$("#beforePicker").val(`${month}/${tmorDate}/${today.getFullYear()}`);
+		$("#afterPicker").val(`${month}/${date}/${today.getFullYear()}`);
 	}
 	$("#filterDataModal").modal("show");
 });
@@ -320,15 +343,19 @@ $("#applyFilterBtn").on("click", () => {
 	endDate = "";
 	if ($('#beforeFilterCheckbox').prop("checked")) {
 		//before filter has been requested
-		console.log("before on")
-		//TODO: VALIDATE THE DATE
+		if (!moment($("#beforePicker").val(), 'MM/DD/YYYY',true).isValid()) {
+			alert("The Before date is invalid. Use the calendar button to select a correct date.");
+			return;
+		}
 		endDate = convertToFirestoreDate($("#beforePicker").val());
 		isFiltered = true;
 	}
 	if ($('#afterFilterCheckbox').prop("checked")) {
 		//after filter has been requested
-		//TODO: VALIDATE THE DATE
-		console.log("after on")
+		if (!moment($("#afterPicker").val(), 'MM/DD/YYYY',true).isValid()) {
+			alert("The After date is invalid. Use the calendar button to select a correct date.");
+			return;
+		}
 		startDate = convertToFirestoreDate($("#afterPicker").val());
 		isFiltered = true;
 	}

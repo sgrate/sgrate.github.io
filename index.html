@@ -5,6 +5,7 @@
 	<title>SGI RateTrack</title>
 	<link rel="icon" type="image/svg+xml" href="img/logo.svg">
     	<script src="https://cdn.syncfusion.com/ej2/dist/ej2.min.js"></script>
+      <script src ="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     	<link href="https://cdn.syncfusion.com/ej2/material.css" rel="stylesheet">
     	<link rel="stylesheet" href="css/style.css">
     	<link rel="stylesheet" href="css/login.css">
@@ -204,7 +205,10 @@
 			</div>
 		</form>
     <script>
-        var datepicker = new ej.calendars.DatePicker({ width: "255px" });
+        var datepicker = new ej.calendars.DatePicker({ 
+          width: "255px",
+          format: 'MM/dd/yyyy'
+});
         datepicker.appendTo('#datepicker');
     </script>
       </div>
@@ -353,7 +357,7 @@
                 <input type = "text" id = "afterPicker">
             
                 <script>
-                  var afterPicker = new ej.calendars.DatePicker({ width: "255px" });
+                  var afterPicker = new ej.calendars.DatePicker({ width: "255px", format: 'MM/dd/yyyy' });
                   afterPicker.appendTo('#afterPicker');
                 </script>  
               </div>
@@ -366,7 +370,7 @@
               <input type = "text" id = "beforePicker">
             
               <script>
-                  var beforePicker = new ej.calendars.DatePicker({ width: "255px" });
+                  var beforePicker = new ej.calendars.DatePicker({ width: "255px", format: 'MM/dd/yyyy' });
                   beforePicker.appendTo('#beforePicker');
               </script>
             </div>
@@ -396,7 +400,7 @@ sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossor
 
 
 </body>
-<footer>Designed & Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.5
+<footer>Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.6
 	<br><button class = "btn btn-danger tiny-btn" id = "signOutBtn">Sign Out</button>
 </footer>
 </html>

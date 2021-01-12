@@ -49,7 +49,7 @@ async function addFirestoreRateEntry(newRateData) {
  */
 async function getAllRateData(projectId) {
 	if (projectId == undefined) {
-		alert("bad req");
+		alert("ERROR: bad req");
 	}
 	var result = "";
 

@@ -206,7 +206,7 @@ function initDataModal(tag) {
             // doc.data() is never undefined for query doc snapshots
             let data = doc.data();
             let rate = (data.hoursSpent * 22 / data.amountProduced).toFixed(2);
-            let shift = (data.shift == "first") ? "1st" : "2nd";
+            let shift = (data.shift == "first") ? "1st Shift" : "2nd Shift";
             let date = firestoreDateToUSDate(data.date);
             if (date == undefined) {
             	return; //MALFORMED DATA, SKIP ENTRY
@@ -239,8 +239,15 @@ function firestoreDateToUSDate(dateStr) {
 	if (components.length != 3) {
 		return undefined;
 	}
-
-	return `${components[1]}/${components[2]}/${components[0]}`;
+	var month = components[1];
+	if (month.length == 1) {
+		month = "0" + month;
+	}
+	var date = components[2];
+	if (date.length == 1) {
+		date = "0" + date;
+	}
+	return `${month}/${date}/${components[0]}`;
 }
 
 
