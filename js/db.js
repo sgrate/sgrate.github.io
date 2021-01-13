@@ -169,9 +169,9 @@ async function getAllRateData(projectId) {
 			}
 			else {
 				if (isFiltered) {
-					$(`#${index}-summary`).html("<h5>Production Summary</h5><b>No data matching the criteria.</b>");
+					$(`#${index}-summary`).html("<h5>General Summary</h5><b>No data matching the criteria.</b>");
 				} else {
-					$(`#${index}-summary`).html("<h5>Production Summary</h5><b>No data yet.</b>");
+					$(`#${index}-summary`).html("<h5>General Summary</h5><b>No data yet.</b>");
 				}
 			}
 		})

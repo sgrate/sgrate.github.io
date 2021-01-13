@@ -3,8 +3,17 @@ body {
   	overflow: hidden; /* Hide scrollbars */
 }
 
+h3, h4, h5 {
+	margin-bottom: 0px !important;
+}
+
 .button-span {
 	line-height: 2.5em;
+}
+
+.horiz-scroll-wrapper {
+	overflow: auto;
+	white-space: nowrap;
 }
 
 .filter-area {
@@ -26,6 +35,7 @@ html {
 #outputContainer {
 	text-align: center;
 	padding: 1vh;
+	max-height: 80vh;
 }
 .centered-container {
 	width: 30vw !important;
@@ -57,15 +67,10 @@ html {
 	padding: 20px;
 	border: solid #F24E1B;
 	border-radius: 30px;
+	max-height: 80vh;
+	overflow-y: hidden;
 }
 
-
-.dataWrapper {
-	border: solid black;
-	border-radius: 20px;
-	height: 80%;
-	margin: .5vw;
-}
 
 header {
 	position: fixed;
@@ -138,7 +143,7 @@ label {
 .manage-entry-btn {
 	background: url("../img/x.svg") no-repeat;
 	background-size: 100% 100%;
-	display: inline-block;
+	/*display: inline-block;*/
 	border-radius: 30px;
 	cursor: default;
 }
@@ -191,11 +196,15 @@ body {
 }
 
 .data-wrapper {
-	min-height: 60vh;
+	min-height: 100%;
 	border: solid black;
 	border-radius: 20px;
 	height: 80%;
-	margin: .5vw;
+	margin-left: .5vw;
+	margin-right: .5vw;
+	min-width: 20vw;
+	display: inline-block;
+	overflow-y: auto;
 }
 .data-wrapper > h3, h5 {
 	text-align: center;

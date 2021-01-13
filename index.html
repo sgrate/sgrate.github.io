@@ -92,7 +92,7 @@
 	</div>
 		
 
-	<div class ="row" style = "height: 100%;" id = "outputContainer">
+	<div class ="horiz-scroll-wrapper" style = "" id = "outputContainer">
     
     <span id = "queriedContent"></span></div>
 </div>
@@ -322,6 +322,15 @@
 				<input id="manageClientNewProjectName" type="text" placeholder="Project Name">
 				<button id = "manageClientNewProjectBtn" class = "xButton" type = "button"><span class = "xButtonText">+</span></button>
 			</div>
+      <div class = "form-group">
+        <iframe id="csvdownload_iframe" style="display:none;"></iframe>
+        <script>
+          function downloadCSV(url) {
+              document.getElementById('csvdownload_iframe').src = url;
+          };
+          </script>
+
+      </div>
 			<div class = "form-group">
 				<button class = "btn btn-danger tiny-btn" id = "deleteCustomerBtn" type = "button">DELETE CUSTOMER</button>
 			</div>
@@ -400,7 +409,7 @@ sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossor
 
 
 </body>
-<footer>Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.6
+<footer>Developed by Spencer Douglas (dougla55@purdue.edu) on behalf of Stephen Gould Indianapolis - 2020 - v0.65
 	<br><button class = "btn btn-danger tiny-btn" id = "signOutBtn">Sign Out</button>
 </footer>
 </html>

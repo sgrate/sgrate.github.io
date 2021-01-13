@@ -109,9 +109,10 @@ function appendTagSpan(tagName) {
 	$(displayWrapper).addClass("col");
 	$(displayWrapper).attr("id", `${$(outputContainer).children(".data-wrapper").length}-data`);
 	$(displayWrapper).addClass("data-wrapper")
+	$(displayWrapper).css("width", )
 	
 	//Add TagName
-	var categoryHeader = document.createElement("h3");
+	var categoryHeader = document.createElement("h5");
 	categoryHeader.innerHTML = tagName;         
 	displayWrapper.appendChild(categoryHeader);
 	
@@ -157,6 +158,7 @@ function initTagDisplay() {
 	curProjectTags.forEach(function(tag) {
     	appendTagSpan(tag);		
  	});
+
 }
 
 
@@ -424,6 +426,8 @@ function loadProject(projectId, projectName, categories) {
 			return;
 		appendTagSpan(cat);
 	});
+
+
 	//Add all the data.
 	getAllRateData(projectId);
 	curProject = projectId;
@@ -437,6 +441,10 @@ function loadProject(projectId, projectName, categories) {
 		"lastCustomerTags": categories
 	}, {merge: true}).then(() => {
 		console.log("successfully did it");
+		let height = $("#outputContainer").css("height");
+		$('.data-wrapper').css("height", "55vh");
+		let width = `${100 / curProjectTags.length}vw`;
+ 		$('.data-wrapper').css("width", width);
 	});
 }
 
