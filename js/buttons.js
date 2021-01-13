@@ -63,7 +63,7 @@ $("#openmodalbtn").on("click", function() {
 		if (date < 10) 
 			date = `0${date}`;
 		
-	$("#datepicker").val(`${month}/${date}/${today.getFullYear()}`);
+	datepicker.value = (`${month}/${date}/${today.getFullYear()}`);
 });
 
 
@@ -267,7 +267,7 @@ $("#filterDataBtn").on("click", function() {
 		tmorDate = `0${tmorDate}`;
 	if(isFiltered) {
 		if (startDate != "") {
-			$("#afterPicker").val(firestoreDateToUSDate(startDate));
+			afterPicker.value = (firestoreDateToUSDate(startDate));
 			$("#afterFilterCheckbox").prop("checked", true);
 			$("#afterFilterLabel").css("filter", "");
 			$("#afterPicker").prop("disabled", false);
@@ -275,11 +275,11 @@ $("#filterDataBtn").on("click", function() {
 			$("#afterFilterCheckbox").prop("checked", false);
 			$("#afterFilterLabel").css("filter", "brightness(3)");
 			$("#afterPicker").prop("disabled", true);
-			$("#afterPicker").val(`${month}/${date}/${today.getFullYear()}`);
+			afterPicker.value = (`${month}/${date}/${today.getFullYear()}`);
 		}
 
 		if (endDate != "") {
-			$("#beforePicker").val(firestoreDateToUSDate(endDate));
+			beforePicker.value = (firestoreDateToUSDate(endDate));
 			$("#beforeFilterCheckbox").prop("checked", true);
 			$("#beforePicker").prop("disabled", false);
 			$("#beforeFilterLabel").css("filter", "");
@@ -287,7 +287,7 @@ $("#filterDataBtn").on("click", function() {
 			$("#beforeFilterCheckbox").prop("checked", false);
 			$("#beforePicker").prop("disabled", true);
 			$("#beforeFilterLabel").css("filter", "brightness(3)");
-			$("#beforePicker").val(`${month}/${tmorDate}/${today.getFullYear()}`);
+			beforePicker.value = (`${month}/${tmorDate}/${today.getFullYear()}`);
 		}
 		
 		
@@ -300,8 +300,8 @@ $("#filterDataBtn").on("click", function() {
 		$("#beforeFilterCheckbox").prop("checked", false);
 
 
-		$("#beforePicker").val(`${month}/${tmorDate}/${today.getFullYear()}`);
-		$("#afterPicker").val(`${month}/${date}/${today.getFullYear()}`);
+		beforePicker.value = (`${month}/${tmorDate}/${today.getFullYear()}`);
+		afterPicker.value = (`${month}/${date}/${today.getFullYear()}`);
 	}
 	$("#filterDataModal").modal("show");
 });

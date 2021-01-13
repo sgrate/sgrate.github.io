@@ -87,7 +87,7 @@ $(document).ready(function() {
 
 	let today = new Date();
 	let result = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`;
-	$("#datepicker").val(`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+	datepicker.value = (`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
 });
 
 //Add a function for
