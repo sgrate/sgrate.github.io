@@ -109,7 +109,6 @@ function appendTagSpan(tagName) {
 	$(displayWrapper).addClass("col");
 	$(displayWrapper).attr("id", `${$(outputContainer).children(".data-wrapper").length}-data`);
 	$(displayWrapper).addClass("data-wrapper")
-	$(displayWrapper).css("width", )
 	
 	//Add TagName
 	var categoryHeader = document.createElement("h5");
