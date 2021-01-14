@@ -85,9 +85,7 @@ $(document).ready(function() {
 	);
 
 
-	let today = new Date();
-	let result = `${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`;
-	datepicker.value = (`${today.getUTCMonth() + 1}/${today.getUTCDate()}/${today.getFullYear()}`);
+
 });
 
 //Add a function for
@@ -442,7 +440,7 @@ function loadProject(projectId, projectName, categories) {
 		console.log("successfully did it");
 		let height = $("#outputContainer").css("height");
 		$('.data-wrapper').css("height", "55vh");
-		let width = `${100 / curProjectTags.length}vw`;
+		let width = "auto";
  		$('.data-wrapper').css("width", width);
 	});
 }

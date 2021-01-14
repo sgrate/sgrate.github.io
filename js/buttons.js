@@ -54,16 +54,17 @@ $("#add-data-btn").on("click", async function() {
 $("#openmodalbtn").on("click", function() {
 	$("#categoryDataModal").modal("hide");
 	let today = new Date();
+	let yesterday = new Date(today.setDate(today.getDate() - 1))
 
-	var month = today.getUTCMonth() + 1;
+	var month = yesterday.getUTCMonth() + 1;
 		if (month < 10) 
 			month = `0${month}`;
 		
-		var date = today.getUTCDate();
+		var date = yesterday.getUTCDate();
 		if (date < 10) 
 			date = `0${date}`;
 		
-	datepicker.value = (`${month}/${date}/${today.getFullYear()}`);
+	datepicker.value = (`${month}/${date}/${yesterday.getFullYear()}`);
 });
 
 
@@ -192,9 +193,6 @@ $("#addProjectCategoryModalBtn").on("click", function() {
 				if (child.children(".category-name").html() == $("#newProjectCategoryName").val()) {
 					alert("Project already exists.");
 					isValid = false;
-				}
-				else {
-					console.log(child.children(".category-name").html(), $("#newProjectCategoryName").val())
 				}
 			});
 			if (isValid) {

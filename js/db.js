@@ -260,7 +260,6 @@ function removeFirestoreProjectData(projectName, customerId) {
 
 
 
-
 /*Accepts a date object and returns a firestore formatted string (DEPRECATED) */
 function convertToFirestoreDate(dateStr) {
 	let date = new Date(dateStr)
@@ -280,3 +279,23 @@ function convertToFirestoreDate(dateStr) {
 	}
 	else return undefined;
 }
+
+/*
+ * getMovingAverages - calculates the average rate for the past 10 and 20 runs for the project specified.
+ */
+function getMovingAverages(projectTag) {
+	db.collection("rates").where("projectId", "==", curProject).where("tag", "==", projectTag).orderBy("date").get().then((result) => {
+		var numEntries = 0;
+		var lastEntries = [];
+		while (numEntries < 20 && numEntries < result.docs.length) {
+			//while we have entries to read and have not read our max of 20 entries, iterate backwards over the array
+			lastEntries.push(result.docs[(result.docs.length - 1) - numEntries++]);
+		}
+		//console.log(lastEntries)
+		lastEntries.forEach((entry) => {
+			console.log(entry.data().tag)
+		});
+		//then calculate the average data over the last 10 and 20 entries
+	})
+}
+
