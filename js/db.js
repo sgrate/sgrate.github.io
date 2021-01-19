@@ -176,7 +176,7 @@ async function getAllRateData(projectId) {
 				else {
 					$(`#${index}-average`).css("color", "red");
 				}
-				$(`#${index}-average`).html(`20 Day: ${movingAverage}`);
+				$(`#${index}-average`).html(`20 Day: ${numberWithCommas(movingAverage)}`);
 			}
 			else {
 				if (isFiltered) {
