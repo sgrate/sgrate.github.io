@@ -4,6 +4,9 @@ CHANGELOG: Here I will record changes made in each release so that you may under
 as well as note new features/changes which may be important to you.
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Beta v0.7:
+	-Added 20 day moving averages for projects
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 Beta v0.65:
 	-Added dynamic sizing of project containers so that the customer data is always readable
 	-General fixes and improvements

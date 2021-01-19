@@ -10,6 +10,7 @@ var lastCollection;
 var isFiltered = false;
 var startDate = "";
 var endDate = "";
+let LABOR_RATE = 22.00;
 
 /* accepts a Project entry and writes it to the rates collection */
 async function addFirestoreProjectEntry(newProject) {
@@ -44,7 +45,7 @@ async function addFirestoreRateEntry(newRateData) {
 		});
 	});
 }
-/* Queries of all rate data for the project, loads data to DOM 
+/* Queries of all rate data for the project, loads data to DOM. Used for initialization
  * If startDate and EndDate are present, will also apply a filter to the data
  */
 async function getAllRateData(projectId) {
@@ -87,85 +88,95 @@ async function getAllRateData(projectId) {
 		var newDataArr = Array(curProjectTags.length).fill("");
 		var firstShiftTotals = [];
 		var secondShiftTotals = [];
-		var totalDataArr = []
+		var totalRateArr = Array(curProjectTags.length).fill(0);
 		for (var i = 0; i < curProjectTags.length; i++) {
-			let newFirstEntry = {totalHours: 0, totalProduced: 0};
-			let newSecondEntry = {totalHours: 0, totalProduced: 0};
+			let newFirstEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
+			let newSecondEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
 			firstShiftTotals.push(newFirstEntry);
 			secondShiftTotals.push(newSecondEntry);
 			
 		}
-		console.log(firstShiftTotals);
+
 	    querySnapshot.forEach(function(doc) {
 	    	let data = doc.data();
 
-	    	let rate = (data.hoursSpent * 22 / data.amountProduced).toFixed(2);
-	    	let newEntry = `${data.date}: ${rate} (${data.amountProduced} over ${data.hoursSpent} hours)<br>`;
+	    	let rate = (data.hoursSpent * LABOR_RATE / data.amountProduced);
+
+	    	let newEntry = `${data.date}: ${rate.toFixed(3)} (${data.amountProduced} over ${data.hoursSpent} hours)<br>`;
 	    	var entryIndex = curProjectTags.indexOf(data.tag);
+
 	    	if (entryIndex == -1) {
-	    		console.log(data.tag)
-	    		//alert("Malformed data, please contact dougla55@purdue.edu.");
+	    		alert("Error for", data.tag);
 	    		return;
 	    	}
+	    	totalRateArr[entryIndex] += rate;
+	    	
 	        result += newEntry;
 	        newDataArr[entryIndex] += newEntry;
 	        if (data.shift == "first") {
 	        	firstShiftTotals[entryIndex].totalHours = firstShiftTotals[entryIndex].totalHours + parseFloat(data.hoursSpent);
 	        	firstShiftTotals[entryIndex].totalProduced =  firstShiftTotals[entryIndex].totalProduced + parseFloat(data.amountProduced);
+	        	firstShiftTotals[entryIndex].entries++;
+	        	firstShiftTotals[entryIndex].totalRate += rate;
 	        }
-	        else {
+	        else if (data.shift == "second") {
 	        	secondShiftTotals[entryIndex].totalHours = secondShiftTotals[entryIndex].totalHours + parseFloat(data.hoursSpent);
 	        	secondShiftTotals[entryIndex].totalProduced =  secondShiftTotals[entryIndex].totalProduced + parseFloat(data.amountProduced);
+	        	secondShiftTotals[entryIndex].entries++;
+	        	secondShiftTotals[entryIndex].totalRate += rate;
 	        }
 	        
 	    });
-	    console.log(firstShiftTotals, secondShiftTotals)
 
-		curProjectTags.forEach(function(tag, index) {
+
+		curProjectTags.forEach(async function(tag, index) {
 			//console.log(index);
 			if (newDataArr[index].length > 0) {
 
 				let firstShiftHours = firstShiftTotals[index].totalHours;
 				let secondShiftHours = secondShiftTotals[index].totalHours;
 
-				let firstShiftCost = firstShiftHours * 22;
-				let secondShiftCost = secondShiftHours * 22;
+				let firstShiftCost = firstShiftHours * LABOR_RATE;
+				let secondShiftCost = secondShiftHours * LABOR_RATE;
 				let totalCost = firstShiftCost + secondShiftCost;
 
 				let firstShiftAmount = firstShiftTotals[index].totalProduced;
 				let secondShiftAmount = secondShiftTotals[index].totalProduced;
 
-				var firstShiftRate = (firstShiftCost / firstShiftAmount).toFixed(3);
-				var secondShiftRate = (secondShiftCost / secondShiftAmount).toFixed(3);
-				var avgRate = (totalCost / (firstShiftAmount + secondShiftAmount)).toFixed(3);
-				if (isNaN(firstShiftRate)) {
-					firstShiftRate = 0.0;
-				} 
-				if (isNaN(secondShiftRate)) {
-					secondShiftRate = 0.0;
-				} 
+				var avgRate = (totalRateArr[index] / (firstShiftTotals[index].entries + secondShiftTotals[index].entries)).toFixed(3);
 
 				let totalsStr = `<h5>General Summary</h5>` +
-								`<Total Produced: ${firstShiftAmount + secondShiftAmount}` +
-								`<br>Total Hours: ${firstShiftHours + secondShiftHours}` +
-								`<br>Average Rate: ${avgRate}` +
-								`<br>Cost to Produce: $${totalCost.toFixed(2)}<br>`;
+								`<Total Produced: ${numberWithCommas(firstShiftAmount + secondShiftAmount)}` +
+								`<br>Total Hours: ${numberWithCommas(firstShiftHours + secondShiftHours)}` +
+								`<br>Average Rate: ${numberWithCommas(avgRate)}` +
+								`<br>Cost to Produce: $${numberWithCommas(totalCost.toFixed(2))}<br>`;				
 
-
+								console.log("first", firstShiftTotals[index].entries)
+				let firstRate = (firstShiftTotals[index].entries == 0) ? 0 : numberWithCommas((firstShiftTotals[index].totalRate / firstShiftTotals[index].entries).toFixed(3))
 				let firstStr = `<h5>First Shift</h5>` +
-								`Total Produced: ${firstShiftAmount}` +
-								`<br>Total Hours: ${firstShiftHours}` +
-								`<br>Average Rate: ${firstShiftRate}` +
-								`<br>Cost to Produce: $${firstShiftCost.toFixed(2)}<br>`;
+								`Total Produced: ${numberWithCommas(firstShiftAmount)}` +
+								`<br>Total Hours: ${numberWithCommas(firstShiftHours)}` +
+								`<br>Average Rate: ${firstRate}` +
+								`<br>Cost to Produce: $${numberWithCommas(firstShiftCost.toFixed(2))}<br>`;
 
+								console.log("second", secondShiftTotals[index].entries)
+				let secondRate = (secondShiftTotals[index].entries == 0) ? 0 : numberWithCommas((secondShiftTotals[index].totalRate / secondShiftTotals[index].entries).toFixed(3))
 
 				let secondStr = `<h5>Second Shift</h5>` +
-								`Total Produced: ${secondShiftAmount}` +
-								`<br>Total Hours: ${secondShiftHours}` +
-								`<br>Average Rate: ${secondShiftRate}` +
-								`<br>Cost to Produce: $${secondShiftCost.toFixed(2)}<br>`;
+								`Total Produced: ${numberWithCommas(secondShiftAmount)}` +
+								`<br>Total Hours: ${numberWithCommas(secondShiftHours)}` +
+								`<br>Average Rate: ${secondRate}` +
+								`<br>Cost to Produce: $${numberWithCommas(secondShiftCost.toFixed(2))}<br>`;
 
 				$(`#${index}-summary`).html(totalsStr + firstStr + secondStr);
+				let movingAverage = (await getMovingAverages(tag)).toFixed(3);
+				if (movingAverage <= avgRate) {
+					$(`#${index}-average`).css("color", "green");
+				}
+				else {
+					$(`#${index}-average`).css("color", "red");
+				}
+				$(`#${index}-average`).html(`20 Day: ${movingAverage}`);
 			}
 			else {
 				if (isFiltered) {
@@ -206,16 +217,22 @@ function deleteEntry(docId, DOMEntry) {
 /*
  *	removeAllFirestoreProjects: removes all of the data associated with a customer 
  */
-function removeAllFirestoreProjectsForCustomer(customerId, projectsArr) {
-	console.log(projectsArr, projectsArr.length)
+function removeAllFirestoreProjectsForCustomer(customerId) {
 
-	projectsArr.forEach(function(project) {
-		removeFirestoreProjectData(project, customerId);
+	db.collection("rates").where("projectId", "==", customerId).get().then((results) => {
+		results.forEach((doc) => {
+			doc.ref.delete();
+		});
+	}).then(() => {
+		db.collection("projects").doc(customerId).delete();
+		$("#manageClientModal").modal("hide");
+		deselectProject();
+	}).catch((err) => {
+		alert("Something went wrong. If the error persists, contact dougla55@purdue.edu. Error:", err);
 	});
 	//if successful, delete the customer.
-	db.collection("projects").doc(customerId).delete();
-	$("#manageClientModal").modal("hide");
-	deselectProject();
+	
+
 }
 
 
@@ -258,7 +275,9 @@ function removeFirestoreProjectData(projectName, customerId) {
 	//delete the project from the customer entry
 }
 
-
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
 /*Accepts a date object and returns a firestore formatted string (DEPRECATED) */
 function convertToFirestoreDate(dateStr) {
@@ -280,22 +299,39 @@ function convertToFirestoreDate(dateStr) {
 	else return undefined;
 }
 
+
+
+
 /*
- * getMovingAverages - calculates the average rate for the past 10 and 20 runs for the project specified.
+ * getMovingAverages - calculates the average rate for the past 20 runs for the project specified.
  */
-function getMovingAverages(projectTag) {
-	db.collection("rates").where("projectId", "==", curProject).where("tag", "==", projectTag).orderBy("date").get().then((result) => {
-		var numEntries = 0;
-		var lastEntries = [];
-		while (numEntries < 20 && numEntries < result.docs.length) {
-			//while we have entries to read and have not read our max of 20 entries, iterate backwards over the array
-			lastEntries.push(result.docs[(result.docs.length - 1) - numEntries++]);
-		}
-		//console.log(lastEntries)
-		lastEntries.forEach((entry) => {
-			console.log(entry.data().tag)
-		});
-		//then calculate the average data over the last 10 and 20 entries
+async function getMovingAverages(projectTag) {
+	return new Promise((resolve, reject) => {
+		db.collection("rates").where("projectId", "==", curProject).where("tag", "==", projectTag).orderBy("date").get().then((result) => {
+			var numEntries = 0;
+			var lastEntries = [];
+			while (numEntries < 20 && numEntries < result.docs.length) {
+				//while we have entries to read and have not read our max of 20 entries, iterate backwards over the array
+				lastEntries.push(result.docs[(result.docs.length - 1) - numEntries++]);
+			}
+			//console.log(lastEntries)
+			var totalRate = 0;
+			lastEntries.forEach((doc, index) => {
+				if (doc == undefined) {
+					return;
+				}
+				let entry = doc.data();
+				totalRate += (LABOR_RATE * entry.hoursSpent) / entry.amountProduced;
+			});
+			if (lastEntries.length) {
+				resolve(totalRate / lastEntries.length);
+			}
+			else {
+				reject("ERROR!");
+			}
+			
+			//then calculate the average data over the last 10 and 20 entries
+		})
 	})
 }
 

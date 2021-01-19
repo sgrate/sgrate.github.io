@@ -91,13 +91,11 @@ $(document).ready(function() {
 //Add a function for
 
 $('#newDataModal').on('hidden.bs.modal', function () {
-    console.log("hidden");
     getAllRateData(curProject);
-})
+});
 $('#categoryDataModal').on('hidden.bs.modal', function () {
-    console.log("hidden");
     getAllRateData(curProject);
-})
+});
 
 
 //Add a span to output display with title of the tag; return its DOM element
@@ -134,6 +132,12 @@ function appendTagSpan(tagName) {
 
 	viewDataBtnWrap.appendChild(viewDataBtn); 
 	displayWrapper.appendChild(viewDataBtnWrap); 
+
+	//Add moving average section
+	var averageSection = document.createElement("div");
+	$(averageSection).attr("id", `${$(outputContainer).children(".data-wrapper").length}-average`);
+	$(averageSection).css("text-align", "center");
+	displayWrapper.appendChild(averageSection);
 
 	//Add data summary Section
 	var summarySection = document.createElement("div");
@@ -204,7 +208,7 @@ function initDataModal(tag) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             let data = doc.data();
-            let rate = (data.hoursSpent * 22 / data.amountProduced).toFixed(2);
+            let rate = ((data.hoursSpent * LABOR_RATE) / data.amountProduced).toFixed(2);
             let shift = (data.shift == "first") ? "1st Shift" : "2nd Shift";
             let date = firestoreDateToUSDate(data.date);
             if (date == undefined) {
