@@ -1,23 +1,76 @@
 /* db.js - functions concerned with interfacing with firestore. 
  * Written by Spencer Douglas dougla55@purdue.edu on behalf of Stephen Gould Indianapolis.
  */
-var curProject;
-var curUserId;
-var curProjectName;
-var curProjectTags; //holds the current subcategory tags of the currently selected project. 
-var newDataWritten = false;
+
+
+var curProject; //current customer id
+var curUserId; //current user id
+var curProjectName; //user-chosen string containing the name of the customer
+var curProjectTags; //holds the current subcategory tags of the currently selected customer. 
 var lastCollection;
+
+//FILTERING GLOBALS
 var isFiltered = false;
 var startDate = "";
 var endDate = "";
-let LABOR_RATE = 22.00;
+//END FILTERING GLOBALS
+let LABOR_RATE = 22.00; //defined adjusted hourly labor cost
+
+//RATE DATA ARRAYS
+var firstShiftData = [];
+var secondShiftData = [];
+var generalData = [];
+
+
+
+
+function initGlobalRateData() {
+	for (var i = 0; i < curProjectTags.length; i++) {
+		let newFirstEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
+		let newSecondEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
+		let newGeneralEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
+		firstShiftData.push(newFirstEntry);
+		secondShiftData.push(newSecondEntry);
+		generalData.push(newGeneralEntry);
+	}
+}
+
+
+
+function getSnapshot() {
+	initGlobalRateData();
+	db.collection("rates").where("projectId", "==", curProject)
+	    .onSnapshot(function(snapshot) {
+	    	var amountChange = 0;
+	    	var hourChange = 0;
+	    	var entryChange = 0;
+	        snapshot.docChanges().forEach(function(change) {
+	            if (change.type === "added") {
+	            	let data = change.doc.data();
+	                amountChange += parseFloat(data.amountProduced);
+	                hourChange += parseFloat(data.hoursSpent);
+	                entryChange++;
+	            }
+	            else if (change.type === "removed") {
+	                let data = hange.doc.data();
+	                amountChange -= parseFloat(data.amountProduced);
+	                hourChange -= parseFloat(data.hoursSpent);
+	                entryChange--;
+	            }
+	        });
+	        console.log(amountChange, hourChange, entryChange)
+	    });
+}
+
+
+
+
 
 /* accepts a Project entry and writes it to the rates collection */
 async function addFirestoreProjectEntry(newProject) {
 	//TODO: CHECK FOR PROPER MEMBERS
 	let writePromise =  new Promise((resolve, reject) => {
 		lastCollection = db.collection("projects").add(newProject).then(function(docRef) {
-			newDataWritten = true;
 			resolve(docRef);
 		    return docRef;
 		}).catch(function(error) {
@@ -34,7 +87,6 @@ async function addFirestoreRateEntry(newRateData) {
 	//TODO: CHECK FOR PROPER MEMBERS
 	let writePromise =  new Promise((resolve, reject) => {
 		lastCollection = db.collection("rates").add(newRateData).then(function(docRef) {
-			newDataWritten = true;
 			resolve();
 		    return true;
 		}).catch(function(error) {
@@ -186,7 +238,6 @@ async function getAllRateData(projectId) {
 				}
 			}
 		})
-		newDataWritten = false;
 	});
 	
 }
@@ -327,11 +378,15 @@ async function getMovingAverages(projectTag) {
 				resolve(totalRate / lastEntries.length);
 			}
 			else {
-				reject("ERROR!");
+				resolve(0);
 			}
 			
 			//then calculate the average data over the last 10 and 20 entries
 		})
 	})
 }
+
+
+
+
 

@@ -1,4 +1,5 @@
 
+//FIXME: newData object is written entirely with strings...
 $("#add-data-btn").on("click", async function() {
 	let tag = $("#viewDataTitle").html().split(" Data")[0]; //extract tag from modal header
 	let now = new Date();

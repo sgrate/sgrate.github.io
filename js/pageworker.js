@@ -450,9 +450,83 @@ function loadProject(projectId, projectName, categories) {
 }
 
 
+/*
+ * updateRateInfo: Updates the corresponding project with new shift rate data information.
+ * @param projectName - the name/tag associated with the project
+ * @param amount - the amount of new product produced
+ * @param time - the hours spent on producing the new product
+ * @param
+ */
+
+ //DEPRECATED
+function updateRateInfo(projectName, amount, hours, addedEntries, shift) {
+	//get all old values by accessing the corresponding shift's data array
+	if (shift === 1) {
+		//FIRST SHIFT
+	} else if (shift === 2) {
+		//SECOND SHIFT
+
+	} else {
+		//SHIFT INVALID
+		alert("An error occurred loading rate data. Please notify dougla55@purdue.edu with a description of the issue.");
+		return;
+	}
+
+	let newAmount = amount + oldAmount;
+	let newHours = hours + oldHours;
+	let oldEntries;
+	let newEntries = oldEntries + addedEntries;
+	let newAvgRate = ((oldEntries * oldAvgRate) + addedEntries) / newEntries; //calculate the new average rate
 
 
+	let newStr = `<h5> Shift</h5>` +
+								`Total Produced: ${numberWithCommas(newAmount)}` +
+								`<br>Total Hours: ${numberWithCommas(newHours)}` +
+								`<br>Average Rate: ${newAvgRate}` +
+								`<br>Cost to Produce: $${numberWithCommas(newCost.toFixed(2))}<br>`;
 
+}
+
+
+/*
+ * 
+ */
+function refreshRateData(projectTag) {
+
+}
+
+
+$("#curProjectTitle").on("click", () => {
+	
+	$("#customerAverageSummaryModal").modal("show");
+	populateAverageInfo();
+})
+
+function populateAverageInfo() {
+	$("#averageSummaryHeader").html(`Rate Summary: ${curProjectName}`);
+	$("#customerAverageSummaryPanel").html("");
+	var html = "";
+	curProjectTags.forEach((tag, index) => {
+		var totalRate;
+		let summary = $(`#${index}-summary`).html().split("<br>");
+		if (summary.length > 1) {
+			
+			totalRate = summary[1].split(": ")[1];
+			totalRate = totalRate.replace(',', '');
+		}
+		else {
+			totalRate = 0.0;
+		}
+		getMovingAverages(tag).then((movingAvg) => {
+			//console.log(movingAvg, totalRate);
+			let datapoint = `<b>${tag}</b> 20 Day: ${numberWithCommas(parseFloat(movingAvg).toFixed(3))} | All Time: ${numberWithCommas(parseFloat(totalRate).toFixed(3))}`;
+			console.log(datapoint);
+			let curHtml = $("#customerAverageSummaryPanel").html();
+			$("#customerAverageSummaryPanel").html(curHtml + "<br>" + datapoint);
+		})
+
+	})
+}
 
 
 

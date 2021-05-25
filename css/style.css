@@ -32,6 +32,16 @@ html {
   scrollbar-width: none;  /* Firefox */
 } 
 
+#curProjectTitle:hover {
+	cursor: pointer;
+	color: black;
+	text-shadow: -.5px -.5px #111111;
+}
+
+#customerAverageSummaryPanel {
+	overflow-y: scroll;
+	max-height: 60vh !important;
+}
 
 #outputContainer {
 	text-align: center;
