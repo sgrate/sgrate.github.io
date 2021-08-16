@@ -149,7 +149,7 @@ label {
 }
 .modal-body {
 	max-height: 75vh;
-	overflow: scroll;
+	overflow-y: scroll;
 }
 .manage-entry-btn {
 	background: url("../img/x.svg") no-repeat;
