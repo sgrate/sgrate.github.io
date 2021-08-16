@@ -208,7 +208,7 @@ function initDataModal(tag) {
         querySnapshot.forEach(function(doc) {
             // doc.data() is never undefined for query doc snapshots
             let data = doc.data();
-            let rate = ((data.hoursSpent * LABOR_RATE) / data.amountProduced).toFixed(2);
+            let rate = ((data.hoursSpent * data.laborRate) / data.amountProduced).toFixed(2);
             let shift = (data.shift == "first") ? "1st Shift" : "2nd Shift";
             let date = firestoreDateToUSDate(data.date);
             if (date == undefined) {

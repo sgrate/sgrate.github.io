@@ -14,14 +14,13 @@ var isFiltered = false;
 var startDate = "";
 var endDate = "";
 //END FILTERING GLOBALS
-let LABOR_RATE = 22.00; //defined adjusted hourly labor cost
 
 //RATE DATA ARRAYS
 var firstShiftData = [];
 var secondShiftData = [];
 var generalData = [];
 
-
+var LABOR_RATE = 22;
 
 
 function initGlobalRateData() {
@@ -142,17 +141,16 @@ async function getAllRateData(projectId) {
 		var secondShiftTotals = [];
 		var totalRateArr = Array(curProjectTags.length).fill(0);
 		for (var i = 0; i < curProjectTags.length; i++) {
-			let newFirstEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
-			let newSecondEntry = {totalHours: 0, totalProduced: 0, entries: 0, totalRate: 0};
+			let newFirstEntry = {totalHours: 0, totalProduced: 0, totalCost: 0, entries: 0, totalRate: 0};
+			let newSecondEntry = {totalHours: 0, totalProduced: 0, totalCost: 0, entries: 0, totalRate: 0};
 			firstShiftTotals.push(newFirstEntry);
 			secondShiftTotals.push(newSecondEntry);
-			
 		}
 
 	    querySnapshot.forEach(function(doc) {
 	    	let data = doc.data();
 
-	    	let rate = (data.hoursSpent * LABOR_RATE / data.amountProduced);
+	    	let rate = (data.hoursSpent * data.laborRate / data.amountProduced);
 
 	    	let newEntry = `${data.date}: ${rate.toFixed(3)} (${data.amountProduced} over ${data.hoursSpent} hours)<br>`;
 	    	var entryIndex = curProjectTags.indexOf(data.tag);
@@ -168,12 +166,14 @@ async function getAllRateData(projectId) {
 	        if (data.shift == "first") {
 	        	firstShiftTotals[entryIndex].totalHours = firstShiftTotals[entryIndex].totalHours + parseFloat(data.hoursSpent);
 	        	firstShiftTotals[entryIndex].totalProduced =  firstShiftTotals[entryIndex].totalProduced + parseFloat(data.amountProduced);
+				firstShiftTotals[entryIndex].totalCost =  firstShiftTotals[entryIndex].totalCost + parseFloat(data.hoursSpent * data.laborRate);
 	        	firstShiftTotals[entryIndex].entries++;
 	        	firstShiftTotals[entryIndex].totalRate += rate;
 	        }
 	        else if (data.shift == "second") {
 	        	secondShiftTotals[entryIndex].totalHours = secondShiftTotals[entryIndex].totalHours + parseFloat(data.hoursSpent);
 	        	secondShiftTotals[entryIndex].totalProduced =  secondShiftTotals[entryIndex].totalProduced + parseFloat(data.amountProduced);
+				secondShiftTotals[entryIndex].totalCost =  secondShiftTotals[entryIndex].totalCost + parseFloat(data.hoursSpent * data.laborRate);
 	        	secondShiftTotals[entryIndex].entries++;
 	        	secondShiftTotals[entryIndex].totalRate += rate;
 	        }
@@ -184,12 +184,11 @@ async function getAllRateData(projectId) {
 		curProjectTags.forEach(async function(tag, index) {
 			//console.log(index);
 			if (newDataArr[index].length > 0) {
-
 				let firstShiftHours = firstShiftTotals[index].totalHours;
 				let secondShiftHours = secondShiftTotals[index].totalHours;
 
-				let firstShiftCost = firstShiftHours * LABOR_RATE;
-				let secondShiftCost = secondShiftHours * LABOR_RATE;
+				let firstShiftCost = firstShiftTotals[index].totalCost;
+				let secondShiftCost = secondShiftTotals[index].totalCost;
 				let totalCost = firstShiftCost + secondShiftCost;
 
 				let firstShiftAmount = firstShiftTotals[index].totalProduced;
@@ -372,9 +371,13 @@ async function getMovingAverages(projectTag) {
 					return;
 				}
 				let entry = doc.data();
-				totalRate += (LABOR_RATE * entry.hoursSpent) / entry.amountProduced;
+				console.log(entry.laborRate , entry.hoursSpent, entry.amountProduced)
+				totalRate += (entry.laborRate * entry.hoursSpent) / entry.amountProduced;
 			});
 			if (lastEntries.length) {
+				if(isNaN(totalRate/lastEntries.length)) {
+					console.log(totalRate, lastEntries)
+				}
 				resolve(totalRate / lastEntries.length);
 			}
 			else {

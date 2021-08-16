@@ -8,6 +8,7 @@ $("#add-data-btn").on("click", async function() {
 	var amountProduced = $("#amount").val();
 	var hoursSpent = $("#hours").val();
 	var shift = $("input[name='shift']:checked").val();
+	var laborRate = $("#laborRate").val();
 	console.log(shift)
 
 	let numRegex = new RegExp('^([0-9]+(\.[0-9]+)?)$'); 
@@ -34,9 +35,9 @@ $("#add-data-btn").on("click", async function() {
 	let newData;
 	let projectId = curProject;
 	if (tag != undefined) 
-		newData = {date, amountProduced, hoursSpent, tag, projectId, shift};
+		newData = {date, amountProduced, hoursSpent, tag, laborRate, projectId, shift};
 	else
-		newData = {date, amountProduced, hoursSpent, projectId, shift};
+		newData = {date, amountProduced, hoursSpent, laborRate, projectId, shift};
 	console.log(`adding new data: ${newData}`);
 	addFirestoreRateEntry(newData).then(function() {
 		$("#newDataModal").modal("hide");
