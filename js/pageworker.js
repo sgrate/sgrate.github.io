@@ -369,6 +369,7 @@ function firestoreDateToUSDate(dateStr) {
  */
 function initProjectsModal() {
 	$("#selectProjectDisplayBody").html("");
+	var projectDOMElements = [];
 	db.collection("projects")
 	.where("creator", "==", curUserId)
 	.get().then(function(querySnapshot) {
@@ -385,12 +386,15 @@ function initProjectsModal() {
     		projectEntry.addEventListener("click", function() {
     			if (confirm(`Would you like to load projects for customer ${data.name}?`)) 
     				loadProject(doc.id, data.name, data.tags);
-    		});
-
-    		let projectsContainer = document.getElementById("selectProjectDisplayBody");
-    		projectsContainer.appendChild(projectEntry);
-	    	console.log(data);
-        });
+			});
+			projectDOMElements.push(projectEntry);
+		});
+		let projectsContainer = document.getElementById("selectProjectDisplayBody");	
+		projectDOMElements.sort((a, b) => a.innerHTML.localeCompare(b.innerHTML));
+		projectDOMElements.forEach((child) => {
+			projectsContainer.appendChild(child);
+		});
+		
         if ($("#selectProjectDisplayBody").html() == "") {
 
         	$("#selectProjectDisplayBody").html("No other customers found. You may create a new customer using the 'New Customer' button.")

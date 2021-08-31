@@ -241,6 +241,17 @@ async function getAllRateData(projectId) {
 	
 }
 
+function updateCustomerName(projectId, newName) {
+	if (!projectId || projectId.length <=0)
+		return;
+	if (!newName || newName.length <=0)
+		return;	
+	db.collection('projects').doc(projectId).set({
+		name: newName
+	}, { merge: true });
+}
+
+
 function deleteEntry(docId, DOMEntry) {
 	if (!confirm("Are you sure you wish to delete this datapoint?"))
 		return false;

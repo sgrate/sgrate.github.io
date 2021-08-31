@@ -103,6 +103,13 @@ $("#manageClientBtn").on("click", function() {
 //UPDATE CLIENT WITH CHANGES
 
 $("#updateClientBtn").on("click", function() {
+	if ($('#manageClientName').val() != curProjectName) {
+		let newName = $('#manageClientName').val();
+		console.log(curProject)
+		updateCustomerName(curProject, newName);
+		curProjectName = newName;
+	}
+
 	var updatedName = false;
 	var projRef = db.collection("projects").doc(curProject);
 
