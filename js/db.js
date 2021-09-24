@@ -193,8 +193,10 @@ async function getAllRateData(projectId) {
 
 				let firstShiftAmount = firstShiftTotals[index].totalProduced;
 				let secondShiftAmount = secondShiftTotals[index].totalProduced;
+				let totalAmount = firstShiftAmount + secondShiftAmount;
 
-				var avgRate = (totalRateArr[index] / (firstShiftTotals[index].entries + secondShiftTotals[index].entries)).toFixed(3);
+
+				var avgRate = (totalCost / totalAmount).toFixed(3);
 
 				let totalsStr = `<h5>General Summary</h5>` +
 								`<Total Produced: ${numberWithCommas(firstShiftAmount + secondShiftAmount)}` +
@@ -202,21 +204,19 @@ async function getAllRateData(projectId) {
 								`<br>Average Rate: ${numberWithCommas(avgRate)}` +
 								`<br>Cost to Produce: $${numberWithCommas(totalCost.toFixed(2))}<br>`;				
 
-								console.log("first", firstShiftTotals[index].entries)
-				let firstRate = (firstShiftTotals[index].entries == 0) ? 0 : numberWithCommas((firstShiftTotals[index].totalRate / firstShiftTotals[index].entries).toFixed(3))
+				let firstRate = (firstShiftAmount == 0) ? 0 : firstShiftCost / firstShiftAmount;
 				let firstStr = `<h5>First Shift</h5>` +
 								`Total Produced: ${numberWithCommas(firstShiftAmount)}` +
 								`<br>Total Hours: ${numberWithCommas(firstShiftHours)}` +
-								`<br>Average Rate: ${firstRate}` +
+								`<br>Average Rate: ${firstRate.toFixed(3)}` +
 								`<br>Cost to Produce: $${numberWithCommas(firstShiftCost.toFixed(2))}<br>`;
 
-								console.log("second", secondShiftTotals[index].entries)
-				let secondRate = (secondShiftTotals[index].entries == 0) ? 0 : numberWithCommas((secondShiftTotals[index].totalRate / secondShiftTotals[index].entries).toFixed(3))
+				let secondRate = (secondShiftAmount == 0) ? 0 : secondShiftCost / secondShiftAmount;
 
 				let secondStr = `<h5>Second Shift</h5>` +
 								`Total Produced: ${numberWithCommas(secondShiftAmount)}` +
 								`<br>Total Hours: ${numberWithCommas(secondShiftHours)}` +
-								`<br>Average Rate: ${secondRate}` +
+								`<br>Average Rate: ${secondRate.toFixed(3)}` +
 								`<br>Cost to Produce: $${numberWithCommas(secondShiftCost.toFixed(2))}<br>`;
 
 				$(`#${index}-summary`).html(totalsStr + firstStr + secondStr);
@@ -368,7 +368,10 @@ function convertToFirestoreDate(dateStr) {
  */
 async function getMovingAverages(projectTag) {
 	return new Promise((resolve, reject) => {
-		db.collection("rates").where("projectId", "==", curProject).where("tag", "==", projectTag).orderBy("date").get().then((result) => {
+		db.collection("rates")
+		.where("projectId", "==", curProject)
+		.where("tag", "==", projectTag)
+		.orderBy("date").get().then((result) => {
 			var numEntries = 0;
 			var lastEntries = [];
 			while (numEntries < 20 && numEntries < result.docs.length) {
@@ -376,20 +379,25 @@ async function getMovingAverages(projectTag) {
 				lastEntries.push(result.docs[(result.docs.length - 1) - numEntries++]);
 			}
 			//console.log(lastEntries)
-			var totalRate = 0;
+			// var totalRate = 0;
+			let totalCost = 0;
+			let totalProduced = 0;
 			lastEntries.forEach((doc, index) => {
 				if (doc == undefined) {
 					return;
 				}
 				let entry = doc.data();
-				console.log(entry.laborRate , entry.hoursSpent, entry.amountProduced)
-				totalRate += (entry.laborRate * entry.hoursSpent) / entry.amountProduced;
+				totalCost += (entry.laborRate * entry.hoursSpent);
+				totalProduced += parseFloat(entry.amountProduced);
+				console.log(totalCost, totalProduced, "totalCost, totalProduced");
+				// totalRate += (entry.laborRate * entry.hoursSpent) / entry.amountProduced;
+
 			});
 			if (lastEntries.length) {
-				if(isNaN(totalRate/lastEntries.length)) {
-					console.log(totalRate, lastEntries)
-				}
-				resolve(totalRate / lastEntries.length);
+				// if(isNaN(totalRate/lastEntries.length)) {
+				// 	console.log(totalRate, lastEntries)
+				// }
+				resolve((totalCost / totalProduced));
 			}
 			else {
 				resolve(0);
